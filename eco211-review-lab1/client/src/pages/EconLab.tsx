@@ -79,7 +79,7 @@ const STRUCT_ITEMS = [
 
 const ALL_STRUCTURES: Structure[] = ["perfect", "mono_comp", "oligopoly", "monopoly"];
 
-function StructuresSection({ onComplete }: { onComplete: () => void }) {
+function StructuresSection({ onComplete }: { onComplete: (score: number, total: number) => void }) {
   const [choices, setChoices] = useState<Record<string, Structure | null>>(() => Object.fromEntries(STRUCT_ITEMS.map(e => [e.name, null])));
   const [checked, setChecked] = useState(false);
   const [marked, setMarked] = useState(false);
@@ -135,7 +135,7 @@ function StructuresSection({ onComplete }: { onComplete: () => void }) {
               <p className="font-bold text-lg">{score} / {STRUCT_ITEMS.length}</p>
               <p className="text-sm text-muted-foreground">{score >= 11 ? "Excellent — you know all four structures cold!" : score >= 9 ? "Good — review any misses above." : "Review the Quick Reference for market structure definitions."}</p>
             </div>
-            {!marked && <button onClick={() => { setMarked(true); onComplete(); }} className="w-full py-3 rounded-xl font-bold text-sm bg-green-600 hover:bg-green-700 text-white transition">Mark Complete ✓</button>}
+            {!marked && <button onClick={() => { setMarked(true); onComplete(score, total); }} className="w-full py-3 rounded-xl font-bold text-sm bg-green-600 hover:bg-green-700 text-white transition">Mark Complete ✓</button>}
             {marked && <p className="text-center text-green-700 font-semibold text-sm">✓ Section Complete</p>}
           </div>
       }
@@ -154,7 +154,7 @@ const COST_QS = [
   { q: "Economies of scale occur when:", opts: ["Long-run average cost rises as output increases", "Long-run average cost falls as output increases", "Marginal cost equals average total cost", "Fixed costs increase with output"], correct: 1, exp: "Economies of scale: as the firm grows, per-unit long-run costs fall. This is why large firms can undercut smaller rivals on price." },
 ];
 
-function CostsSection({ onComplete }: { onComplete: () => void }) {
+function CostsSection({ onComplete }: { onComplete: (score: number, total: number) => void }) {
   const [qIdx, setQIdx] = useState(0);
   const [answers, setAnswers] = useState<(number | null)[]>(Array(COST_QS.length).fill(null));
   const [checked, setChecked] = useState<boolean[]>(Array(COST_QS.length).fill(false));
@@ -202,7 +202,7 @@ function CostsSection({ onComplete }: { onComplete: () => void }) {
               : allDone && !marked
                 ? <div className="flex-1 space-y-2">
                     <div className="rounded-xl bg-muted p-3 text-center text-sm"><span className="font-bold">{score}/{COST_QS.length}</span> correct</div>
-                    <button onClick={() => { setMarked(true); onComplete(); }} className="w-full py-3 rounded-xl font-bold text-sm bg-green-600 hover:bg-green-700 text-white transition">Mark Complete ✓</button>
+                    <button onClick={() => { setMarked(true); onComplete(score, total); }} className="w-full py-3 rounded-xl font-bold text-sm bg-green-600 hover:bg-green-700 text-white transition">Mark Complete ✓</button>
                   </div>
                 : marked ? <p className="flex-1 text-center text-green-700 font-semibold text-sm py-3">✓ Section Complete</p> : null
             }
@@ -256,7 +256,7 @@ const MP_SCENARIOS = [
   },
 ];
 
-function MarketPowerSection({ onComplete }: { onComplete: () => void }) {
+function MarketPowerSection({ onComplete }: { onComplete: (score: number, total: number) => void }) {
   const [scenarios] = useState(() => MP_SCENARIOS.map(s => { const sh = shuffleOpts(s.opts, s.correct); return { ...s, opts: sh.opts, correct: sh.correct as number }; }));
   const [scenIdx, setScenIdx] = useState(0);
   const [answers, setAnswers] = useState<(number | null)[]>(Array(scenarios.length).fill(null));
@@ -328,7 +328,7 @@ function MarketPowerSection({ onComplete }: { onComplete: () => void }) {
           : allDone && !marked
             ? <div className="space-y-3">
                 <div className="rounded-xl bg-muted p-3 text-center text-sm"><span className="font-bold">{score}/{scenarios.length}</span> correct</div>
-                <button onClick={() => { setMarked(true); onComplete(); }} className="w-full py-3 rounded-xl font-bold text-sm bg-green-600 hover:bg-green-700 text-white transition">Mark Complete ✓</button>
+                <button onClick={() => { setMarked(true); onComplete(score, total); }} className="w-full py-3 rounded-xl font-bold text-sm bg-green-600 hover:bg-green-700 text-white transition">Mark Complete ✓</button>
               </div>
             : marked ? <p className="text-center text-green-700 font-semibold text-sm">✓ Section Complete</p> : null
       }
@@ -346,7 +346,7 @@ const ANTITRUST_QS = [
   { q: "A four-firm concentration ratio of 85% and HHI of 2,400 for a proposed merger market indicates:", opts: ["A competitive market — the FTC will approve quickly", "A highly concentrated market — the FTC will likely scrutinize the merger closely", "The market needs more firms to reduce the HHI", "A natural monopoly that should be regulated"], correct: 1, exp: "4-Firm Ratio of 85% (well above 50%) and HHI of 2,400 (well above 1,800) both signal high concentration. Any merger that increases HHI further would face intense FTC scrutiny and likely require conditions or be blocked." },
 ];
 
-function AntitrustSection({ onComplete }: { onComplete: () => void }) {
+function AntitrustSection({ onComplete }: { onComplete: (score: number, total: number) => void }) {
   const [qIdx, setQIdx] = useState(0);
   const [scenarios] = useState(() => ANTITRUST_QS.map(s => { const sh = shuffleOpts(s.opts, s.correct); return { ...s, opts: sh.opts, correct: sh.correct as number }; }));
   const [answers, setAnswers] = useState<(number | null)[]>(Array(scenarios.length).fill(null));
@@ -395,7 +395,7 @@ function AntitrustSection({ onComplete }: { onComplete: () => void }) {
               : allDone && !marked
                 ? <div className="flex-1 space-y-2">
                     <div className="rounded-xl bg-muted p-3 text-center text-sm"><span className="font-bold">{score}/{scenarios.length}</span> correct</div>
-                    <button onClick={() => { setMarked(true); onComplete(); }} className="w-full py-3 rounded-xl font-bold text-sm bg-green-600 hover:bg-green-700 text-white transition">Mark Complete ✓</button>
+                    <button onClick={() => { setMarked(true); onComplete(score, total); }} className="w-full py-3 rounded-xl font-bold text-sm bg-green-600 hover:bg-green-700 text-white transition">Mark Complete ✓</button>
                   </div>
                 : marked ? <p className="flex-1 text-center text-green-700 font-semibold text-sm py-3">✓ Section Complete</p> : null
             }
@@ -446,7 +446,7 @@ const QUIZ_QUESTIONS: QA[] = [
   { q: "The 4-firm concentration ratio measures:", opts: ["The HHI of the top 4 firms only", "The combined market share of the largest 4 firms in the industry", "The average profit margin of the top 4 firms", "The ratio of large to small firms in an industry"], correct: 1, exp: "C4 = sum of market shares of the 4 largest firms. A ratio above 40% suggests moderate concentration; above 60% is typically considered highly concentrated." },
 ];
 
-function QuizStation({ onPass, onFail }: { onPass: (score: number) => void; onFail: (score: number) => void }) {
+function QuizStation({ onPass, onFail }: { onPass: (score: number, results: { correct: boolean; exp: string }[]) => void; onFail: (score: number, results: { correct: boolean; exp: string }[]) => void }) {
   const [questions] = useState(() => shuffle(QUIZ_QUESTIONS).map(q => { const s = shuffleOpts(q.opts, q.correct); return { ...q, opts: s.opts, correct: s.correct }; }));
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number | number[]>>({});
@@ -474,8 +474,8 @@ function QuizStation({ onPass, onFail }: { onPass: (score: number) => void; onFa
   const score = questions.filter((_, i) => answers[i] === questions[i].correct).length;
 
   function handleSubmit() {
-    if (score >= 13) onPass(score);
-    else onFail(score);
+    if (score >= 13) onPass(score, results);
+    else onFail(score, results);
   }
 
   function navDotStyle(i: number): string {
@@ -576,15 +576,15 @@ function ResultsScreen({ score, name, setName, onRetry }: { score: number; name:
   function handlePrint() {
     const w = window.open("", "_blank", "width=820,height=960");
     if (!w) return;
-    w.document.write(`<!DOCTYPE html><html><head><title>ECO 211 Review Lab 1 Results</title>
+    w.document.write(`<!DOCTYPE html><html><head><title>ECO 211 Review Lab 2 Results</title>
     <style>body{font-family:Georgia,serif;max-width:680px;margin:40px auto;color:#1e293b;padding:0 20px}h1{font-size:1.5rem;color:#1e3a5f;border-bottom:3px solid #1e3a5f;padding-bottom:8px}.score{font-size:2.5rem;font-weight:bold;color:#16a34a;margin:16px 0}.badge{display:inline-block;background:#dcfce7;color:#15803d;border:2px solid #16a34a;border-radius:8px;padding:8px 20px;font-weight:bold;font-size:1.1rem}.footer{margin-top:40px;font-size:.75rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:12px}</style>
     </head><body>
-    <h1>ECO 211 ECONLAB — Review Lab 1: Chapters 7–11</h1>
+    <h1>ECO 211 ECONLAB — Review Lab 2: Chapters 7–11</h1>
     <div class="score">${score} / 15</div><div class="badge">✓ Mastery Achieved</div>
     <div style="margin-top:16px;font-size:.9rem"><p><strong>Student:</strong> ${name || "(Name not entered)"}</p><p><strong>Completed:</strong> ${new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</p></div>
     <p style="margin-top:20px;font-size:.95rem">This student completed all review sections and achieved mastery on the Ch7–11 cumulative review quiz (≥ 13/15 correct).</p>
     <div style="margin-top:16px;font-size:.85rem;color:#475569"><strong>Chapters Covered:</strong> Ch7 Production &amp; Costs · Ch8 Perfect Competition · Ch9 Monopoly · Ch10 Monopolistic Competition &amp; Oligopoly · Ch11 Antitrust &amp; Regulation</div>
-    <div class="footer">ECO 211 ECONLAB · Review Lab 1 · OpenStax Principles of Microeconomics 3e</div>
+    <div class="footer">ECO 211 ECONLAB · Review Lab 2 · OpenStax Principles of Microeconomics 3e</div>
     </body></html>`);
     w.document.close(); setTimeout(() => w.print(), 600); setPrinted(true);
   }
@@ -594,7 +594,7 @@ function ResultsScreen({ score, name, setName, onRetry }: { score: number; name:
         <Award className="w-16 h-16 text-green-500 mx-auto" />
         <h2 className="text-2xl font-bold text-foreground">Review Mastery Achieved!</h2>
         <p className="text-4xl font-bold text-green-600">{score} / 15</p>
-        <p className="text-sm text-muted-foreground">You've completed ECO 211 Review Lab 1, covering Chapters 7–11.</p>
+        <p className="text-sm text-muted-foreground">You've completed ECO 211 Review Lab 2, covering Chapters 7–11.</p>
         <div className="text-left space-y-2">
           <label className="text-sm font-semibold text-foreground" htmlFor="student-name">Your Name (for submission)</label>
           <input id="student-name" type="text" value={name} onChange={e => setName(e.target.value)} placeholder="First Last" className="w-full border-2 border-border rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-primary" />
@@ -615,6 +615,7 @@ export default function EconLab() {
   const [showRef, setShowRef] = useState(false);
   const [quizScore, setQuizScore] = useState(0);
   const [quizResults, setQuizResults] = useState<{ correct: boolean; exp: string }[]>([]);
+  const [sectionScores, setSectionScores] = useState<Record<string, { score: number; total: number }>>({}); 
   const [studentName, setStudentName] = useState("");
   const mainRef = useRef<HTMLDivElement>(null);
 
@@ -626,15 +627,15 @@ export default function EconLab() {
   ];
 
   const allSectionsDone = SECTIONS.every(s => completed.has(s.id));
-  function markDone(id: string) { setCompleted(prev => new Set([...prev, id])); setSection("intro"); }
-  function handlePass(score: number) { setQuizScore(score); try { localStorage.setItem("econlab211_done_review1", "true"); } catch (_) {} setSection("results"); }
-  function handleFail(score: number) { setQuizScore(score); setSection("not-yet"); }
-
-  if (section === "not-yet") return <NotYetScreen score={quizScore} onRetry={() => setSection("quiz")} />;
-  if (section === "results") return <ResultsScreen score={quizScore} name={studentName} setName={setStudentName} onRetry={() => { setQuizScore(0); setCompleted(new Set()); setSection("intro"); }} />;
+  function markDone(id: string, score?: number, total?: number) { if (score !== undefined && total !== undefined) setSectionScores(prev => ({ ...prev, [id]: { score, total } })); setCompleted(prev => new Set([...prev, id])); setSection("intro"); }
+  function handlePass(score: number, results?: { correct: boolean; exp: string }[]) { setQuizScore(score); if (results) setQuizResults(results); try { localStorage.setItem("econlab211_done_review1", "true"); } catch (_) {} setSection("results"); }
+  function handleFail(score: number, results?: { correct: boolean; exp: string }[]) { setQuizScore(score); if (results) setQuizResults(results); setSection("not-yet"); }
 
   return (
-    <>
+    <div className="min-h-screen bg-background text-foreground">
+      {section === "not-yet" && <NotYetScreen score={quizScore} onRetry={() => setSection("quiz")} />}
+      {section === "results" && <ResultsScreen score={quizScore} name={studentName} setName={setStudentName} onRetry={() => { setQuizScore(0); setCompleted(new Set()); setSection("intro"); }} />}
+      {section !== "results" && section !== "not-yet" && (<>
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-primary text-primary-foreground px-4 py-2 rounded z-50">Skip to main content</a>
       {showRef && <ReferenceModal onClose={() => setShowRef(false)} />}
 
@@ -643,7 +644,7 @@ export default function EconLab() {
           <div className="flex items-center gap-3 min-w-0">
             <div className="min-w-0">
               <p className="text-xs font-semibold text-white/70 uppercase tracking-wide">ECO 211 ECONLAB</p>
-              <p className="text-sm font-bold text-white truncate">Review Lab 1 · Chapters 7–11</p>
+              <p className="text-sm font-bold text-white truncate">Review Lab 2 · Chapters 7–11</p>
             </div>
             <a href="https://www.perplexity.ai/computer/a/eco-211-econlab-course-hub-h76o7OX6SpisjlWADnIRGg" target="_blank" rel="noopener noreferrer"
               className="hidden sm:flex text-white/80 hover:text-white text-xs font-medium whitespace-nowrap items-center gap-1 transition shrink-0">
@@ -750,7 +751,7 @@ export default function EconLab() {
             </div>
             {section === "structures"  && <StructuresSection  onComplete={() => markDone("structures")}  />}
             {section === "costs"       && <CostsSection       onComplete={() => markDone("costs")}       />}
-            {section === "marketpower" && <MarketPowerSection onComplete={() => markDone("marketpower")} />}
+            {section === "marketpower" && <MarketPowerSection onComplete={(sc,t) => markDone("marketpower",sc,t)} />}
             {section === "antitrust"   && <AntitrustSection   onComplete={() => markDone("antitrust")}   />}
           </div>
         )}
@@ -766,12 +767,13 @@ export default function EconLab() {
               15 questions drawn randomly from the Ch7–11 question bank. Mastery = 13/15 correct.
             </div>
             <QuizStation
-              onPass={(score) => { setQuizScore(score); try { localStorage.setItem("econlab211_done_review1", "true"); } catch (_) {} setSection("results"); }}
-              onFail={(score) => { setQuizScore(score); setSection("not-yet"); }}
+              onPass={(score, results) => handlePass(score, results)}
+              onFail={(score, results) => handleFail(score, results)}
             />
           </div>
         )}
       </main>
-    </>
+    </>)}
+    </div>
   );
 }

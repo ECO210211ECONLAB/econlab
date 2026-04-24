@@ -90,7 +90,7 @@ const EXT_ITEMS = [
 ];
 const ALL_EXT: ExtType[] = ["negative", "positive", "none"];
 
-function ExternalitiesSection({ onComplete }: { onComplete: () => void }) {
+function ExternalitiesSection({ onComplete }: { onComplete: (score: number, total: number) => void }) {
   const [choices, setChoices] = useState<Record<string, ExtType | null>>(() => Object.fromEntries(EXT_ITEMS.map(e => [e.name, null])));
   const [checked, setChecked] = useState(false);
   const [marked, setMarked] = useState(false);
@@ -163,7 +163,7 @@ const ENV_SCENARIOS = [
   { q: "Climate change is caused by CO₂ emitted globally. The U.S. alone cannot solve it — China and India must also reduce emissions. No single country has an incentive to bear full costs while others free ride.", opts: ["The U.S. should act alone — it is the most responsible emitter", "This is a global negative externality requiring international agreements — no single nation can solve it", "Cap-and-trade within the U.S. will solve global climate change", "The Coase Theorem: nations will negotiate the efficient solution without government involvement"], correct: 1, exp: "Global negative externality: CO₂ mixes globally, so the harm and the solution both cross borders. This creates an international prisoner's dilemma — each country benefits if others reduce but has incentive to free ride. International agreements (Paris Agreement) are needed to coordinate action." },
 ];
 
-function EnvToolsSection({ onComplete }: { onComplete: () => void }) {
+function EnvToolsSection({ onComplete }: { onComplete: (score: number, total: number) => void }) {
   const [scenarios] = useState(() => ENV_SCENARIOS.map(s => { const sh = shuffleOpts(s.opts, s.correct); return { ...s, opts: sh.opts, correct: sh.correct as number }; }));
   const [qIdx, setQIdx] = useState(0);
   const [answers, setAnswers] = useState<(number | null)[]>(Array(scenarios.length).fill(null));
@@ -242,7 +242,7 @@ const GOOD_ITEMS = [
 ];
 const ALL_TYPES: GoodType[] = ["private", "public", "club", "common"];
 
-function GoodsTypeSection({ onComplete }: { onComplete: () => void }) {
+function GoodsTypeSection({ onComplete }: { onComplete: (score: number, total: number) => void }) {
   const [choices, setChoices] = useState<Record<string, GoodType | null>>(() => Object.fromEntries(GOOD_ITEMS.map(e => [e.name, null])));
   const [checked, setChecked] = useState(false);
   const [marked, setMarked] = useState(false);
@@ -320,7 +320,7 @@ const INNOV_QS = [
   { q: "The free rider problem explains why markets fail to provide public goods because:", opts: ["Public goods are too costly for any firm to produce profitably", "Since non-payers can't be excluded, individuals have no incentive to pay voluntarily — undermining revenue for providers", "Government regulations prevent private provision of public goods", "Public goods generate negative externalities that reduce demand"], correct: 1, exp: "Free rider problem: rational individuals avoid paying for a good they can use regardless of payment. When many free ride, revenues collapse and the good isn't provided — or is severely underprovided. This is why public goods require non-market solutions." },
 ];
 
-function InnovationSection({ onComplete }: { onComplete: () => void }) {
+function InnovationSection({ onComplete }: { onComplete: (score: number, total: number) => void }) {
   const [qIdx, setQIdx] = useState(0);
   const [scenarios] = useState(() => INNOV_QS.map(s => { const sh = shuffleOpts(s.opts, s.correct); return { ...s, opts: sh.opts, correct: sh.correct as number }; }));
   const [answers, setAnswers] = useState<(number | null)[]>(Array(scenarios.length).fill(null));
@@ -420,7 +420,7 @@ const QUIZ_QUESTIONS: QA[] = [
   { q: "Which policy tool directly subsidizes positive externalities?", opts: ["A Pigouvian tax on the activity", "A per-unit subsidy equal to the marginal external benefit", "A cap-and-trade permit system", "A command-and-control standard"], correct: 1, exp: "A Pigouvian subsidy = marginal external benefit. It lowers the private cost by the external benefit amount, inducing producers/consumers to increase the activity to the socially optimal level." },
 ];
 
-function QuizStation({ onPass, onFail }: { onPass: (score: number) => void; onFail: (score: number) => void }) {
+function QuizStation({ onPass, onFail }: { onPass: (score: number, results: { correct: boolean; exp: string }[]) => void; onFail: (score: number, results: { correct: boolean; exp: string }[]) => void }) {
   const [questions] = useState(() => shuffle(QUIZ_QUESTIONS).map(q => { const s = shuffleOpts(q.opts, q.correct); return { ...q, opts: s.opts, correct: s.correct }; }));
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number | number[]>>({});
@@ -469,8 +469,8 @@ function QuizStation({ onPass, onFail }: { onPass: (score: number) => void; onFa
   const score = questions.filter((_, i) => isAnswerCorrect(i)).length;
 
   function handleSubmit() {
-    if (score >= 9) onPass(score);
-    else onFail(score);
+    if (score >= 13) onPass(score, results);
+    else onFail(score, results);
   }
 
   function navDotStyle(i: number): string {
@@ -580,15 +580,15 @@ function ResultsScreen({ score, name, setName, onRetry }: { score: number; name:
   function handlePrint() {
     const w = window.open("", "_blank", "width=820,height=960");
     if (!w) return;
-    w.document.write(`<!DOCTYPE html><html><head><title>ECO 211 Review Lab 2 Results</title>
+    w.document.write(`<!DOCTYPE html><html><head><title>ECO 211 Review Lab 3 Results</title>
     <style>body{font-family:Georgia,serif;max-width:680px;margin:40px auto;color:#1e293b;padding:0 20px}h1{font-size:1.5rem;color:#1e3a5f;border-bottom:3px solid #1e3a5f;padding-bottom:8px}.score{font-size:2.5rem;font-weight:bold;color:#16a34a;margin:16px 0}.badge{display:inline-block;background:#dcfce7;color:#15803d;border:2px solid #16a34a;border-radius:8px;padding:8px 20px;font-weight:bold;font-size:1.1rem}.footer{margin-top:40px;font-size:.75rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:12px}</style>
     </head><body>
-    <h1>ECO 211 ECONLAB — Review Lab 2: Chapters 12–13</h1>
+    <h1>ECO 211 ECONLAB — Review Lab 3: Chapters 12–13</h1>
     <div class="score">${score} / 15</div><div class="badge">✓ Mastery Achieved</div>
     <div style="margin-top:16px;font-size:.9rem"><p><strong>Student:</strong> ${name || "(Name not entered)"}</p><p><strong>Completed:</strong> ${new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</p></div>
     <p style="margin-top:20px;font-size:.95rem">This student completed all review sections and achieved mastery on the Ch12–13 cumulative review quiz (≥ 13/15 correct).</p>
     <div style="margin-top:16px;font-size:.85rem;color:#475569"><strong>Chapters Covered:</strong> Ch12 Environmental Protection &amp; Negative Externalities · Ch13 Positive Externalities &amp; Public Goods</div>
-    <div class="footer">ECO 211 ECONLAB · Review Lab 2 · OpenStax Principles of Microeconomics 3e</div>
+    <div class="footer">ECO 211 ECONLAB · Review Lab 3 · OpenStax Principles of Microeconomics 3e</div>
     </body></html>`);
     w.document.close(); setTimeout(() => w.print(), 600); setPrinted(true);
   }
@@ -598,7 +598,7 @@ function ResultsScreen({ score, name, setName, onRetry }: { score: number; name:
         <Award className="w-16 h-16 text-green-500 mx-auto" />
         <h2 className="text-2xl font-bold text-foreground">Review Mastery Achieved!</h2>
         <p className="text-4xl font-bold text-green-600">{score} / 15</p>
-        <p className="text-sm text-muted-foreground">You've completed ECO 211 Review Lab 2, covering Chapters 12–13.</p>
+        <p className="text-sm text-muted-foreground">You've completed ECO 211 Review Lab 3, covering Chapters 12–13.</p>
         <div className="text-left space-y-2">
           <label className="text-sm font-semibold text-foreground" htmlFor="student-name">Your Name (for submission)</label>
           <input id="student-name" type="text" value={name} onChange={e => setName(e.target.value)} placeholder="First Last" className="w-full border-2 border-border rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-primary" />
@@ -619,6 +619,7 @@ export default function EconLab() {
   const [showRef, setShowRef] = useState(false);
   const [quizScore, setQuizScore] = useState(0);
   const [quizResults, setQuizResults] = useState<{ correct: boolean; exp: string }[]>([]);
+  const [sectionScores, setSectionScores] = useState<Record<string, { score: number; total: number }>>({}); 
   const [studentName, setStudentName] = useState("");
   const mainRef = useRef<HTMLDivElement>(null);
 
@@ -630,15 +631,15 @@ export default function EconLab() {
   ];
 
   const allSectionsDone = SECTIONS.every(s => completed.has(s.id));
-  function markDone(id: string) { setCompleted(prev => new Set([...prev, id])); setSection("intro"); }
-  function handlePass(score: number) { setQuizScore(score); try { localStorage.setItem("econlab211_done_review2", "true"); } catch (_) {} setSection("results"); }
-  function handleFail(score: number) { setQuizScore(score); setSection("not-yet"); }
-
-  if (section === "not-yet") return <NotYetScreen score={quizScore} onRetry={() => setSection("quiz")} />;
-  if (section === "results") return <ResultsScreen score={quizScore} name={studentName} setName={setStudentName} onRetry={() => { setQuizScore(0); setCompleted(new Set()); setSection("intro"); }} />;
+  function markDone(id: string, score?: number, total?: number) { if (score !== undefined && total !== undefined) setSectionScores(prev => ({ ...prev, [id]: { score, total } })); setCompleted(prev => new Set([...prev, id])); setSection("intro"); }
+  function handlePass(score: number, results?: { correct: boolean; exp: string }[]) { setQuizScore(score); if (results) setQuizResults(results); try { localStorage.setItem("econlab211_done_review2", "true"); } catch (_) {} setSection("results"); }
+  function handleFail(score: number, results?: { correct: boolean; exp: string }[]) { setQuizScore(score); if (results) setQuizResults(results); setSection("not-yet"); }
 
   return (
-    <>
+    <div className="min-h-screen bg-background text-foreground">
+      {section === "not-yet" && <NotYetScreen score={quizScore} onRetry={() => setSection("quiz")} />}
+      {section === "results" && <ResultsScreen score={quizScore} name={studentName} setName={setStudentName} onRetry={() => { setQuizScore(0); setCompleted(new Set()); setSection("intro"); }} />}
+      {section !== "results" && section !== "not-yet" && (<>
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-primary text-primary-foreground px-4 py-2 rounded z-50">Skip to main content</a>
       {showRef && <ReferenceModal onClose={() => setShowRef(false)} />}
 
@@ -647,7 +648,7 @@ export default function EconLab() {
           <div className="flex items-center gap-3 min-w-0">
             <div className="min-w-0">
               <p className="text-xs font-semibold text-white/70 uppercase tracking-wide">ECO 211 ECONLAB</p>
-              <p className="text-sm font-bold text-white truncate">Review Lab 2 · Chapters 12–13</p>
+              <p className="text-sm font-bold text-white truncate">Review Lab 3 · Chapters 12–13</p>
             </div>
             <a href="https://www.perplexity.ai/computer/a/eco-211-econlab-course-hub-h76o7OX6SpisjlWADnIRGg" target="_blank" rel="noopener noreferrer"
               className="hidden sm:flex text-white/80 hover:text-white text-xs font-medium whitespace-nowrap items-center gap-1 transition shrink-0">
@@ -745,7 +746,7 @@ export default function EconLab() {
             <div className="rounded-xl bg-card border-2 border-border p-4">
               <h2 className="text-base font-bold text-foreground">{SECTIONS.find(s => s.id === section)?.label}</h2>
             </div>
-            {section === "externalities" && <ExternalitiesSection onComplete={() => markDone("externalities")} />}
+            {section === "externalities" && <ExternalitiesSection onComplete={(sc,t) => markDone("externalities",sc,t)} />}
             {section === "envtools"      && <EnvToolsSection      onComplete={() => markDone("envtools")}      />}
             {section === "goodstype"     && <GoodsTypeSection      onComplete={() => markDone("goodstype")}     />}
             {section === "innovation"    && <InnovationSection     onComplete={() => markDone("innovation")}    />}
@@ -763,12 +764,13 @@ export default function EconLab() {
               15 questions drawn from the Ch12–13 bank. Mastery = 13/15 correct.
             </div>
             <QuizStation
-              onPass={(score) => { setQuizScore(score); try { localStorage.setItem("econlab211_done_review2", "true"); } catch (_) {} setSection("results"); }}
-              onFail={(score) => { setQuizScore(score); setSection("not-yet"); }}
+              onPass={(score, results) => handlePass(score, results)}
+              onFail={(score, results) => handleFail(score, results)}
             />
           </div>
         )}
       </main>
-    </>
+    </>)}
+    </div>
   );
 }
