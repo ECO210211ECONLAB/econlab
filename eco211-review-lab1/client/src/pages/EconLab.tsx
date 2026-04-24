@@ -135,7 +135,7 @@ function StructuresSection({ onComplete }: { onComplete: (score: number, total: 
               <p className="font-bold text-lg">{score} / {STRUCT_ITEMS.length}</p>
               <p className="text-sm text-muted-foreground">{score >= 11 ? "Excellent — you know all four structures cold!" : score >= 9 ? "Good — review any misses above." : "Review the Quick Reference for market structure definitions."}</p>
             </div>
-            {!marked && <button onClick={() => { setMarked(true); onComplete(score, total); }} className="w-full py-3 rounded-xl font-bold text-sm bg-green-600 hover:bg-green-700 text-white transition">Mark Complete ✓</button>}
+            {!marked && <button onClick={() => { setMarked(true); onComplete(score, STRUCT_ITEMS.length); }} className="w-full py-3 rounded-xl font-bold text-sm bg-green-600 hover:bg-green-700 text-white transition">Mark Complete ✓</button>}
             {marked && <p className="text-center text-green-700 font-semibold text-sm">✓ Section Complete</p>}
           </div>
       }
@@ -202,7 +202,7 @@ function CostsSection({ onComplete }: { onComplete: (score: number, total: numbe
               : allDone && !marked
                 ? <div className="flex-1 space-y-2">
                     <div className="rounded-xl bg-muted p-3 text-center text-sm"><span className="font-bold">{score}/{COST_QS.length}</span> correct</div>
-                    <button onClick={() => { setMarked(true); onComplete(score, total); }} className="w-full py-3 rounded-xl font-bold text-sm bg-green-600 hover:bg-green-700 text-white transition">Mark Complete ✓</button>
+                    <button onClick={() => { setMarked(true); onComplete(score, COST_QS.length); }} className="w-full py-3 rounded-xl font-bold text-sm bg-green-600 hover:bg-green-700 text-white transition">Mark Complete ✓</button>
                   </div>
                 : marked ? <p className="flex-1 text-center text-green-700 font-semibold text-sm py-3">✓ Section Complete</p> : null
             }
@@ -328,7 +328,7 @@ function MarketPowerSection({ onComplete }: { onComplete: (score: number, total:
           : allDone && !marked
             ? <div className="space-y-3">
                 <div className="rounded-xl bg-muted p-3 text-center text-sm"><span className="font-bold">{score}/{scenarios.length}</span> correct</div>
-                <button onClick={() => { setMarked(true); onComplete(score, total); }} className="w-full py-3 rounded-xl font-bold text-sm bg-green-600 hover:bg-green-700 text-white transition">Mark Complete ✓</button>
+                <button onClick={() => { setMarked(true); onComplete(score, scenarios.length); }} className="w-full py-3 rounded-xl font-bold text-sm bg-green-600 hover:bg-green-700 text-white transition">Mark Complete ✓</button>
               </div>
             : marked ? <p className="text-center text-green-700 font-semibold text-sm">✓ Section Complete</p> : null
       }
@@ -395,7 +395,7 @@ function AntitrustSection({ onComplete }: { onComplete: (score: number, total: n
               : allDone && !marked
                 ? <div className="flex-1 space-y-2">
                     <div className="rounded-xl bg-muted p-3 text-center text-sm"><span className="font-bold">{score}/{scenarios.length}</span> correct</div>
-                    <button onClick={() => { setMarked(true); onComplete(score, total); }} className="w-full py-3 rounded-xl font-bold text-sm bg-green-600 hover:bg-green-700 text-white transition">Mark Complete ✓</button>
+                    <button onClick={() => { setMarked(true); onComplete(score, scenarios.length); }} className="w-full py-3 rounded-xl font-bold text-sm bg-green-600 hover:bg-green-700 text-white transition">Mark Complete ✓</button>
                   </div>
                 : marked ? <p className="flex-1 text-center text-green-700 font-semibold text-sm py-3">✓ Section Complete</p> : null
             }
@@ -474,6 +474,10 @@ function QuizStation({ onPass, onFail }: { onPass: (score: number, results: { co
   const score = questions.filter((_, i) => answers[i] === questions[i].correct).length;
 
   function handleSubmit() {
+    const results = questions.map((q, i) => ({
+      correct: answers[i] === q.correct,
+      exp: q.exp,
+    }));
     if (score >= 13) onPass(score, results);
     else onFail(score, results);
   }
@@ -571,38 +575,76 @@ function NotYetScreen({ score, onRetry }: { score: number; onRetry: () => void }
   );
 }
 
-function ResultsScreen({ score, name, setName, onRetry }: { score: number; name: string; setName: (n: string) => void; onRetry: () => void }) {
-  const [printed, setPrinted] = useState(false);
+function ResultsScreen({ score, name, setName, onRetry, sectionScores, quizResults }: {
+  score: number; name: string; setName: (n: string) => void; onRetry: () => void;
+  sectionScores: Record<string, { score: number; total: number }>;
+  quizResults: { correct: boolean; exp: string }[];
+}) {
+  const SECTION_LABELS: Record<string,string> = { structures:"Market Structures", costs:"Cost & Profit", marketpower:"Market Power", antitrust:"Antitrust & Regulation" };
   function handlePrint() {
     const w = window.open("", "_blank", "width=820,height=960");
     if (!w) return;
+    const now = new Date().toLocaleDateString("en-US", { weekday:"long", year:"numeric", month:"long", day:"numeric" });
+    const sectionRows = Object.entries(sectionScores).map(([id,s]) =>
+      `<tr><td style="padding:6px 10px;border:1px solid #e2e8f0">${SECTION_LABELS[id]||id}</td><td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center;font-weight:bold;color:${s.score===s.total?"#16a34a":"#475569"}">${s.score}/${s.total}</td></tr>`
+    ).join("");
+    const quizRows = quizResults.map((r,i) =>
+      `<tr style="background:${r.correct?"#f0fdf4":"#fef2f2"}">
+        <td style="padding:8px;border:1px solid #e2e8f0;text-align:center;font-weight:bold;color:${r.correct?"#16a34a":"#dc2626"}">${r.correct?"✓":"✗"}</td>
+        <td style="padding:8px;border:1px solid #e2e8f0;font-size:11px;color:#475569">Q${i+1}: ${r.exp}</td>
+      </tr>`
+    ).join("");
     w.document.write(`<!DOCTYPE html><html><head><title>ECO 211 Review Lab 2 Results</title>
-    <style>body{font-family:Georgia,serif;max-width:680px;margin:40px auto;color:#1e293b;padding:0 20px}h1{font-size:1.5rem;color:#1e3a5f;border-bottom:3px solid #1e3a5f;padding-bottom:8px}.score{font-size:2.5rem;font-weight:bold;color:#16a34a;margin:16px 0}.badge{display:inline-block;background:#dcfce7;color:#15803d;border:2px solid #16a34a;border-radius:8px;padding:8px 20px;font-weight:bold;font-size:1.1rem}.footer{margin-top:40px;font-size:.75rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:12px}</style>
+    <style>body{font-family:Arial,sans-serif;max-width:720px;margin:40px auto;color:#1e293b;padding:0 20px}h1{font-size:1.4rem;color:#1a2744;border-bottom:3px solid #1a2744;padding-bottom:8px}h2{font-size:1rem;color:#1a2744;margin-top:24px}table{width:100%;border-collapse:collapse;margin-top:8px}th{background:#1a2744;color:white;padding:8px 10px;text-align:left;font-size:12px}.footer{margin-top:40px;font-size:.75rem;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:12px}</style>
     </head><body>
     <h1>ECO 211 ECONLAB — Review Lab 2: Chapters 7–11</h1>
-    <div class="score">${score} / 15</div><div class="badge">✓ Mastery Achieved</div>
-    <div style="margin-top:16px;font-size:.9rem"><p><strong>Student:</strong> ${name || "(Name not entered)"}</p><p><strong>Completed:</strong> ${new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</p></div>
-    <p style="margin-top:20px;font-size:.95rem">This student completed all review sections and achieved mastery on the Ch7–11 cumulative review quiz (≥ 13/15 correct).</p>
-    <div style="margin-top:16px;font-size:.85rem;color:#475569"><strong>Chapters Covered:</strong> Ch7 Production &amp; Costs · Ch8 Perfect Competition · Ch9 Monopoly · Ch10 Monopolistic Competition &amp; Oligopoly · Ch11 Antitrust &amp; Regulation</div>
-    <div class="footer">ECO 211 ECONLAB · Review Lab 2 · OpenStax Principles of Microeconomics 3e</div>
+    <p><strong>Student:</strong> ${name||"—"} &nbsp;&nbsp; <strong>Date:</strong> ${now}</p>
+    <p><strong>Quiz Score:</strong> ${score}/15 &nbsp;&nbsp; <strong>Status:</strong> ${score>=13?"✓ Mastery Achieved":"Needs Review"}</p>
+    <h2>Station Scores</h2>
+    <table><thead><tr><th>Station</th><th style="width:80px;text-align:center">Score</th></tr></thead><tbody>${sectionRows}</tbody></table>
+    <h2>Quiz Question Review (15 Questions)</h2>
+    <table><thead><tr><th style="width:30px"></th><th>Explanation</th></tr></thead><tbody>${quizRows}</tbody></table>
+    <div class="footer">ECO 211 ECONLAB · Review Lab 2: Chapters 7–11 · Access for free at https://openstax.org/books/principles-microeconomics-3e/pages/1-introduction</div>
     </body></html>`);
-    w.document.close(); setTimeout(() => w.print(), 600); setPrinted(true);
+    w.document.close(); setTimeout(() => w.print(), 600);
   }
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-green-50 to-blue-50">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center space-y-5">
-        <Award className="w-16 h-16 text-green-500 mx-auto" />
-        <h2 className="text-2xl font-bold text-foreground">Review Mastery Achieved!</h2>
-        <p className="text-4xl font-bold text-green-600">{score} / 15</p>
-        <p className="text-sm text-muted-foreground">You've completed ECO 211 Review Lab 2, covering Chapters 7–11.</p>
-        <div className="text-left space-y-2">
-          <label className="text-sm font-semibold text-foreground" htmlFor="student-name">Your Name (for submission)</label>
-          <input id="student-name" type="text" value={name} onChange={e => setName(e.target.value)} placeholder="First Last" className="w-full border-2 border-border rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-primary" />
+      <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 space-y-5">
+        <div className="text-center">
+          <Award className="w-16 h-16 text-green-500 mx-auto mb-3" />
+          <p className="text-4xl font-bold text-green-600">{score} / 15</p>
+          <p className="text-sm text-muted-foreground mt-1">ECO 211 Review Lab 2 · Chapters 7–11</p>
         </div>
-        <button onClick={handlePrint} className="w-full py-3 rounded-xl bg-primary hover:opacity-90 text-primary-foreground font-bold text-sm transition">🖨️ Print / Save as PDF</button>
-        {printed && <p className="text-xs text-muted-foreground">Print dialog opened. Choose "Save as PDF" to save your results.</p>}
-        <p className="text-xs text-muted-foreground">Take a screenshot or print this page and submit to Brightspace.</p>
-        <button onClick={onRetry} className="text-sm text-muted-foreground hover:text-foreground transition-colors">↺ Back to Dashboard</button>
+        {Object.keys(sectionScores).length > 0 && (
+          <div className="bg-muted rounded-xl p-4 space-y-2">
+            <p className="text-xs font-bold text-foreground">Station Scores</p>
+            {[{id:"structures",label:"Market Structures"},{id:"costs",label:"Cost & Profit"},{id:"marketpower",label:"Market Power"},{id:"antitrust",label:"Antitrust & Regulation"}].map(s => sectionScores[s.id] && (
+              <div key={s.id} className="flex justify-between text-xs">
+                <span className="text-muted-foreground">{s.label}</span>
+                <span className={`font-bold ${sectionScores[s.id].score===sectionScores[s.id].total?"text-green-600":"text-amber-600"}`}>{sectionScores[s.id].score}/{sectionScores[s.id].total}</span>
+              </div>
+            ))}
+          </div>
+        )}
+        <div>
+          <label className="text-sm font-semibold text-foreground block mb-1" htmlFor="student-name">Your Name (required for credit)</label>
+          <input id="student-name" type="text" value={name} onChange={e => setName(e.target.value)} placeholder="First and Last Name"
+            className="w-full border-2 border-border rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none" />
+        </div>
+        {quizResults.length > 0 && (
+          <div className="space-y-2 max-h-64 overflow-y-auto">
+            <p className="text-xs font-bold text-foreground">Quiz Question Review</p>
+            {quizResults.map((r,i) => (
+              <div key={i} className={`rounded-xl border p-3 ${r.correct?"border-green-200 bg-green-50":"border-red-200 bg-red-50"}`}>
+                <p className={`text-xs font-bold ${r.correct?"text-green-700":"text-red-600"}`}>{r.correct?"✓":"✗"} Q{i+1}</p>
+                <p className={`text-xs mt-0.5 ${r.correct?"text-green-700":"text-red-600"}`}>{r.exp}</p>
+              </div>
+            ))}
+          </div>
+        )}
+        <button onClick={handlePrint} disabled={!name.trim()} className="w-full py-3 rounded-xl bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground font-bold text-sm transition">🖨️ Print / Save as PDF</button>
+        <button onClick={onRetry} className="w-full py-2 text-sm text-muted-foreground hover:text-foreground transition-colors">↺ Start Over</button>
       </div>
     </div>
   );
@@ -634,7 +676,7 @@ export default function EconLab() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {section === "not-yet" && <NotYetScreen score={quizScore} onRetry={() => setSection("quiz")} />}
-      {section === "results" && <ResultsScreen score={quizScore} name={studentName} setName={setStudentName} onRetry={() => { setQuizScore(0); setCompleted(new Set()); setSection("intro"); }} />}
+      {section === "results" && <ResultsScreen score={quizScore} name={studentName} setName={setStudentName} onRetry={() => { setQuizScore(0); setCompleted(new Set()); setSection("intro"); }} sectionScores={sectionScores} quizResults={quizResults} />}
       {section !== "results" && section !== "not-yet" && (<>
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-primary text-primary-foreground px-4 py-2 rounded z-50">Skip to main content</a>
       {showRef && <ReferenceModal onClose={() => setShowRef(false)} />}
@@ -734,7 +776,7 @@ export default function EconLab() {
         {section !== "intro" && section !== "quiz" && section !== "not-yet" && section !== "results" && (
           <div className="space-y-4">
             <div className="flex flex-wrap gap-1.5 items-center">
-
+              <button onClick={() => setSection("intro")} className="px-3 py-1 rounded-full text-xs font-semibold border-2 border-border text-muted-foreground hover:border-primary/40 transition">← Dashboard</button>
               <button onClick={() => setShowRef(true)} className="px-3 py-1 rounded-full text-xs font-semibold border-2 border-border text-muted-foreground hover:border-primary/40 transition">📚 Quick Ref</button>
               {SECTIONS.map(s => {
                 const done = completed.has(s.id); const active = section === s.id;
@@ -749,10 +791,10 @@ export default function EconLab() {
             <div className="rounded-xl bg-card border-2 border-border p-4">
               <h2 className="text-base font-bold text-foreground">{SECTIONS.find(s => s.id === section)?.label}</h2>
             </div>
-            {section === "structures"  && <StructuresSection  onComplete={() => markDone("structures")}  />}
-            {section === "costs"       && <CostsSection       onComplete={() => markDone("costs")}       />}
+            {section === "structures"  && <StructuresSection  onComplete={(sc,t) => markDone("structures",sc,t)}  />}
+            {section === "costs"       && <CostsSection       onComplete={(sc,t) => markDone("costs",sc,t)}       />}
             {section === "marketpower" && <MarketPowerSection onComplete={(sc,t) => markDone("marketpower",sc,t)} />}
-            {section === "antitrust"   && <AntitrustSection   onComplete={() => markDone("antitrust")}   />}
+            {section === "antitrust"   && <AntitrustSection   onComplete={(sc,t) => markDone("antitrust",sc,t)}   />}
           </div>
         )}
 
