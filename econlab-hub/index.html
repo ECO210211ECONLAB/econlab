@@ -55,20 +55,13 @@
     .lab-card-top { display: flex; align-items: flex-start; gap: 12px; }
     .lab-chapter-badge { background: var(--navy); color: white; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 99px; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
     .lab-card.completed .lab-chapter-badge { background: var(--green); }
+    .lab-done-badge { display: none; font-size: 10px; font-weight: 700; color: var(--green); background: var(--green-bg); border: 1.5px solid var(--green-border); border-radius: 99px; padding: 2px 8px; margin-top: 6px; width: fit-content; }
+    .lab-card.completed .lab-done-badge { display: block; }
     .lab-title { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.3; }
     .lab-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
     .lab-stations { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap-: 4px; }
-    .lab-footer { display: flex; align-items: center; justify-content: space-between; }
-    .lab-status { font-size: 11px; font-weight: 600; }
-    .lab-status.done { color: var(--green); }
-    .lab-status.pending { color: var(--muted); }
-    .launch-btn { background: var(--navy); color: white; font-size: 12px; font-weight: 700; padding: 7px 16px; border-radius: 99px; border: none; cursor: pointer; transition: background 0.15s; text-decoration: none; display: inline-block; }
-    .launch-btn:hover { background: var(--amber); }
-    .lab-card.completed .launch-btn { background: var(--green); }
-
     /* Coming soon cards */
     .lab-card.coming-soon { opacity: 0.55; pointer-events: none; border-style: dashed; }
-    .lab-card.coming-soon .launch-btn { background: var(--muted); cursor: not-allowed; }
 
     /* Footer */
     footer { text-align: center; padding: 24px; font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); }
@@ -85,7 +78,7 @@
   </svg>
   <div>
     <div class="header-title">ECO 210 ECONLAB</div>
-    <div class="header-sub">Macroeconomics</div>
+    <div class="header-sub">Based on OpenStax Macroeconomics 3e Textbook</div>
   </div>
   <div class="header-progress">
     <div class="header-progress-label" id="progress-label">0 of 9 labs complete</div>
@@ -113,13 +106,9 @@
         <div>
           <div class="lab-title">Introduction to Economics</div>
           <div class="lab-desc">Scarcity, opportunity cost, micro vs. macro, factors of production, circular flow, and economic systems.</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-ch1">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/eco210-lab-ch1-dist-public-xUGKV9_3Q0KToOAmM0Is4Q" target="_blank" aria-label="Launch Introduction to Economics (opens in new tab)">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
     <a class="lab-card" role="listitem" href="https://www.perplexity.ai/computer/a/econ-lab-chapter-6-gdp-b4YmobDPSmyijNq5ssJ.wA" target="_blank" data-lab="ch6">
       <div class="lab-card-top">
@@ -127,13 +116,9 @@
         <div>
           <div class="lab-title">Gross Domestic Product</div>
           <div class="lab-desc">Measuring the economy: expenditure approach, real vs. nominal GDP, and limitations of GDP as a welfare measure.</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-ch6">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/econ-lab-chapter-6-gdp-b4YmobDPSmyijNq5ssJ.wA" target="_blank" aria-label="Launch Gross Domestic Product (opens in new tab)">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
     <a class="lab-card" role="listitem" href="https://www.perplexity.ai/computer/a/econ-lab-chapter-7-economic-gr-lf9uJ_8bRlCc.9gvUtfUWg" target="_blank" data-lab="ch7">
       <div class="lab-card-top">
@@ -141,13 +126,9 @@
         <div>
           <div class="lab-title">Economic Growth</div>
           <div class="lab-desc">Sources of long-run growth: capital, labor, technology, and the Rule of 70. Includes Ch6 recap.</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-ch7">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/econ-lab-chapter-7-economic-gr-lf9uJ_8bRlCc.9gvUtfUWg" target="_blank" aria-label="Launch Economic Growth (opens in new tab)">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
     <a class="lab-card" role="listitem" href="https://www.perplexity.ai/computer/a/econ-lab-chapter-8-unemploymen-OYbSU0EpSfaI5J8VHHIPqA" target="_blank" data-lab="ch8">
       <div class="lab-card-top">
@@ -155,13 +136,9 @@
         <div>
           <div class="lab-title">Unemployment</div>
           <div class="lab-desc">Types of unemployment, NAIRU, the unemployment rate formula, and what the headline number hides. Includes Ch7 recap.</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-ch8">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/econ-lab-chapter-8-unemploymen-OYbSU0EpSfaI5J8VHHIPqA" target="_blank" aria-label="Launch Unemployment (opens in new tab)">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
     <a class="lab-card" role="listitem" href="https://www.perplexity.ai/computer/a/econ-lab-chapter-9-inflation-Ae_nq32ySfu.muqTOUGNtg" target="_blank" data-lab="ch9">
       <div class="lab-card-top">
@@ -169,13 +146,9 @@
         <div>
           <div class="lab-title">Inflation</div>
           <div class="lab-desc">CPI construction, real vs. nominal values, winners and losers from inflation. Includes Ch8 recap.</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-ch9">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/econ-lab-chapter-9-inflation-Ae_nq32ySfu.muqTOUGNtg" target="_blank" aria-label="Launch Inflation (opens in new tab)">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
     <a class="lab-card" role="listitem" href="https://www.perplexity.ai/computer/a/eco-210-econlab-review-lab-cha-gnMEko43SOy.POtWVA_p8w" target="_blank" data-lab="review69"
        aria-label="Launch Review Lab: Chapters 6-9 (opens in new tab)">
@@ -184,13 +157,9 @@
         <div>
           <div class="lab-title">Review Lab — Chapters 6–9</div>
           <div class="lab-desc">Cumulative synthesis: GDP, Economic Growth, Unemployment, Inflation. 4 review sections + 15-question quiz (13/15 required).</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-review69">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/eco-210-econlab-review-lab-cha-gnMEko43SOy.POtWVA_p8w" target="_blank">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
     <a class="lab-card" role="listitem" href="https://www.perplexity.ai/computer/a/econ-lab-chapter-11-ad-as-mode-1kct90oSRI6ewOkgNmikYg" target="_blank" data-lab="ch11">
       <div class="lab-card-top">
@@ -198,13 +167,9 @@
         <div>
           <div class="lab-title">The AD-AS Model</div>
           <div class="lab-desc">Aggregate demand and supply, three zones, shifters, real-world cases, and the output gap. Includes Ch6–9 review.</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-ch11">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/econ-lab-chapter-11-ad-as-mode-1kct90oSRI6ewOkgNmikYg" target="_blank" aria-label="Launch The AD-AS Model (opens in new tab)">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
     <a class="lab-card" role="listitem" href="https://www.perplexity.ai/computer/a/econ-lab-chapter-12-13-keynesi-KIYjJzdKT0WCQ9mnU_mJyg" target="_blank" data-lab="ch1213">
       <div class="lab-card-top">
@@ -212,13 +177,9 @@
         <div>
           <div class="lab-title">Keynesian &amp; Neoclassical</div>
           <div class="lab-desc">Two schools of thought, sticky wages, the multiplier, the Phillips Curve, and policy debates. Includes Ch11 recap.</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-ch1213">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/econ-lab-chapter-12-13-keynesi-KIYjJzdKT0WCQ9mnU_mJyg" target="_blank" aria-label="Launch Keynesian &amp; Neoclassical (opens in new tab)">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
     <a class="lab-card" role="listitem" href="https://www.perplexity.ai/computer/a/econ-lab-chapter-14-money-and-9i2t1qz7QcCm4m.Egpnydg" target="_blank" data-lab="ch14">
       <div class="lab-card-top">
@@ -226,13 +187,9 @@
         <div>
           <div class="lab-title">Money and Banking</div>
           <div class="lab-desc">Functions of money, M1 vs. M2, bank balance sheets, fractional reserves, and the money multiplier. Includes Ch12+13 recap.</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-ch14">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/econ-lab-chapter-14-money-and-9i2t1qz7QcCm4m.Egpnydg" target="_blank" aria-label="Launch Money and Banking (opens in new tab)">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
     <a class="lab-card" role="listitem" href="https://www.perplexity.ai/computer/a/econ-lab-chapter-15-monetary-p-1p_a402eReqJptapbXneuQ" target="_blank" data-lab="ch15">
       <div class="lab-card-top">
@@ -240,13 +197,9 @@
         <div>
           <div class="lab-title">Monetary Policy &amp; Bank Regulation</div>
           <div class="lab-desc">The Fed, FOMC, policy tools (pre- and post-2008), transmission chain, and the federal funds rate. Includes Ch14 recap.</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-ch15">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/econ-lab-chapter-15-monetary-p-1p_a402eReqJptapbXneuQ" target="_blank" aria-label="Launch Monetary Policy &amp; Bank Regulation (opens in new tab)">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
     <a class="lab-card" role="listitem" href="https://www.perplexity.ai/computer/a/econ-lab-chapter-17-government-hzOJqpbDRhy83Ckk5wKoDQ" target="_blank" data-lab="ch17">
       <div class="lab-card-top">
@@ -254,27 +207,9 @@
         <div>
           <div class="lab-title">Government Budgets &amp; Fiscal Policy</div>
           <div class="lab-desc">Fiscal tools, automatic stabilizers, deficit vs. debt, tax systems, three lags, and crowding out. Includes Ch15 recap.</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-ch17">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/econ-lab-chapter-17-government-hzOJqpbDRhy83Ckk5wKoDQ" target="_blank" aria-label="Launch Government Budgets &amp; Fiscal Policy (opens in new tab)">Launch →</a>
-      </div>
-
-    <a class="lab-card" role="listitem" href="https://www.perplexity.ai/computer/a/eco-210-econlab-review-lab-cha-bZAOg6CLSP6evPwbHtnXsw" target="_blank" data-lab="review1117"
-       aria-label="Launch Review Lab: Chapters 11-17 (opens in new tab)">
-      <div class="lab-card-top">
-        <span class="lab-chapter-badge" style="background:hsl(280,60%,40%)">Review</span>
-        <div>
-          <div class="lab-title">Review Lab — Chapters 11–17</div>
-          <div class="lab-desc">Cumulative synthesis: AD-AS, Keynesian & Neoclassical, Money & Banking, Monetary Policy, Fiscal Policy. 5 sections + 15-question quiz (13/15 required).</div>
-        </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-review1117">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/eco-210-econlab-review-lab-cha-bZAOg6CLSP6evPwbHtnXsw" target="_blank">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
     <a class="lab-card" href="https://www.perplexity.ai/computer/a/eco-210-practice-final-exam-SHaeFsRQSFmz4eJswNj_cQ" target="_blank" data-lab="practicefinal"
        aria-label="Launch Practice Final Exam (opens in new tab)">
@@ -283,19 +218,15 @@
         <div>
           <div class="lab-title">Practice Final Exam</div>
           <div class="lab-desc">30 questions drawn randomly from a 45-question bank. Matching, multiple choice, multi-select, and sequencing. Full chapter coverage Ch6–Ch17. New random version each attempt.</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-practicefinal">Exam Prep</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/eco-210-practice-final-exam-SHaeFsRQSFmz4eJswNj_cQ" target="_blank">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
   </div><!-- end labs-grid -->
 </main>
 
 
-<footer role="contentinfo">ECO 210 · Principles of Macroeconomics · OpenStax 3e · Labs built with ECO 210 ECONLAB</footer>
+<footer role="contentinfo">Access course textbook for free at <a href="https://openstax.org/books/principles-macroeconomics-3e/pages/1-introduction" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;">https://openstax.org/books/principles-macroeconomics-3e/pages/1-introduction</a></footer>
 
 <script>
   // Labs that can be marked complete (in order)
@@ -327,14 +258,9 @@
     // Update cards
     LABS.forEach(lab => {
       const card = document.querySelector(`[data-lab="${lab}"]`);
-      const status = document.getElementById(`status-${lab}`);
-      if (!card || !status) return;
+      if (!card) return;
       if (completed.includes(lab)) {
         card.classList.add('completed');
-        status.textContent = '✓ Completed';
-        status.className = 'lab-status done';
-        const btn = card.querySelector('a.launch-btn');
-        if (btn) btn.textContent = 'Review →';
       }
     });
   }

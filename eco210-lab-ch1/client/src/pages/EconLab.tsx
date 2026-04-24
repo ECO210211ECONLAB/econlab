@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 // ─────────────────────────────────────────────
 // Types
@@ -25,12 +25,19 @@ const CH1_SUMMARY = [
 ];
 
 function SummaryModal({ onClose }: { onClose: () => void }) {
+  const closeRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    closeRef.current?.focus();
+    const handleKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [onClose]);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" role="dialog" aria-modal="true" aria-labelledby="summary-title">
       <div className="bg-card rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col">
         <div className="flex items-center justify-between p-5 border-b border-border">
           <h2 id="summary-title" className="font-display font-bold text-base text-foreground">Chapter 1 Summary</h2>
-          <button onClick={onClose} className="text-muted-foreground hover:text-foreground text-2xl leading-none" aria-label="Close">&times;</button>
+          <button ref={closeRef} onClick={onClose} type="button" className="text-muted-foreground hover:text-foreground text-2xl leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded" aria-label="Close summary dialog">&times;</button>
         </div>
         <div className="overflow-y-auto p-5 space-y-4 flex-1">
           {CH1_SUMMARY.map((s, i) => (
@@ -45,7 +52,7 @@ function SummaryModal({ onClose }: { onClose: () => void }) {
           </p>
         </div>
         <div className="p-4 border-t border-border">
-          <button onClick={onClose} className="w-full py-2 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold text-sm transition">Close &amp; Return to Lab</button>
+          <button onClick={onClose} type="button" className="w-full py-2 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">Close &amp; Return to Lab</button>
         </div>
       </div>
     </div>
@@ -110,7 +117,7 @@ function OppCostStation({ onComplete }: { onComplete: () => void }) {
         <p className="text-lg font-bold text-green-800">You got {score}/{OPP_SCENARIOS.length} correct</p>
         <p className="text-sm text-green-700 mt-1">{score === 3 ? "Perfect — you understand opportunity cost." : "Review the explanations above and remember: opportunity cost is always the next-best alternative forgone."}</p>
       </div>
-      <button onClick={onComplete} className="w-full py-3 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold transition">Mark Complete ✓</button>
+      <button type="button" onClick={onComplete} className="w-full py-3 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">Mark Complete ✓</button>
     </div>
   );
 
@@ -121,8 +128,8 @@ function OppCostStation({ onComplete }: { onComplete: () => void }) {
         <p>Every choice has an opportunity cost — the value of the <strong>next-best alternative you give up</strong>. It is not the cost of what you chose; it is the cost of what you didn't choose.</p>
       </div>
       <div className="flex items-center justify-between text-xs text-muted-foreground">
-        <span>Scenario {idx + 1} of {OPP_SCENARIOS.length}</span>
-        <div className="flex gap-1">{OPP_SCENARIOS.map((_, i) => <div key={i} className={`w-2.5 h-2.5 rounded-full ${i < idx ? "bg-green-500" : i === idx ? "bg-primary" : "bg-muted"}`} />)}</div>
+        <span aria-live="polite" aria-atomic="true">Scenario {idx + 1} of {OPP_SCENARIOS.length}</span>
+        <div className="flex gap-1" role="img" aria-label={`Progress: scenario ${idx + 1} of ${OPP_SCENARIOS.length}`}>{OPP_SCENARIOS.map((_, i) => <div key={i} className={`w-2.5 h-2.5 rounded-full ${i < idx ? "bg-green-500" : i === idx ? "bg-primary" : "bg-muted"}`} aria-hidden="true" />)}</div>
       </div>
       <div className="bg-card border-2 border-border rounded-xl p-4">
         <p className="text-xs text-muted-foreground italic mb-2">{q.scenario}</p>
@@ -136,8 +143,11 @@ function OppCostStation({ onComplete }: { onComplete: () => void }) {
               else cls = "border-border text-muted-foreground opacity-50";
             } else if (sel === oi) cls = "border-primary bg-primary/10 text-primary font-semibold";
             return (
-              <button key={oi} disabled={checked} onClick={() => setSel(oi)}
-                className={`w-full text-left rounded-xl border-2 px-4 py-2.5 text-sm transition ${cls} ${!checked ? "hover:border-primary/40" : ""}`}>
+              <button key={oi} type="button" disabled={checked} onClick={() => setSel(oi)}
+                aria-pressed={sel === oi}
+                className={`w-full text-left rounded-xl border-2 px-4 py-2.5 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${cls} ${!checked ? "hover:border-primary/40" : ""}`}>
+                {checked && oi === q.correct && <span className="mr-1" aria-hidden="true">✓</span>}
+                {checked && oi === sel && oi !== q.correct && <span className="mr-1" aria-hidden="true">✗</span>}
                 <span className="font-bold mr-2">{String.fromCharCode(65 + oi)}.</span>{opt}
               </button>
             );
@@ -146,8 +156,8 @@ function OppCostStation({ onComplete }: { onComplete: () => void }) {
         {checked && <p className={`mt-3 text-xs font-medium ${sel === q.correct ? "text-green-700" : "text-amber-700"}`}>{sel === q.correct ? "✓ Correct! " : "✗ Not quite. "}{q.exp}</p>}
       </div>
       {!checked
-        ? <button onClick={check} disabled={sel === null} className="w-full py-3 bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground rounded-xl font-semibold transition">Check Answer</button>
-        : <button onClick={next} className="w-full py-3 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold transition">{idx + 1 < OPP_SCENARIOS.length ? "Next Scenario →" : "See Results"}</button>
+        ? <button type="button" onClick={check} disabled={sel === null} className="w-full py-3 bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground rounded-xl font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">Check Answer</button>
+        : <button type="button" onClick={next} className="w-full py-3 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">{idx + 1 < OPP_SCENARIOS.length ? "Next Scenario →" : "See Results"}</button>
       }
     </div>
   );
@@ -229,14 +239,14 @@ function FactorsStation({ onComplete }: { onComplete: () => void }) {
         })}
       </div>
       {!checked
-        ? <button onClick={() => setChecked(true)} disabled={!allPlaced} className="w-full py-3 bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground rounded-xl font-semibold transition">Check My Sorting</button>
+        ? <button type="button" onClick={() => setChecked(true)} disabled={!allPlaced} className="w-full py-3 bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground rounded-xl font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">Check My Sorting</button>
         : (
           <div className="space-y-3">
             <div className={`rounded-xl p-3 text-center ${correct >= 10 ? "bg-green-50 border border-green-200" : "bg-amber-50 border border-amber-200"}`}>
               <p className="font-bold text-sm">{correct}/{FACTOR_ITEMS.length} correct</p>
               <p className="text-xs mt-0.5">{correct >= 10 ? "Excellent work!" : "Review any misses above — the key is whether it's a natural resource, human effort, physical tool/building, or innovative risk-taking."}</p>
             </div>
-            <button onClick={onComplete} className="w-full py-3 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold transition">Mark Complete ✓</button>
+            <button type="button" onClick={onComplete} className="w-full py-3 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">Mark Complete ✓</button>
           </div>
         )}
     </div>
@@ -301,14 +311,14 @@ function MicroMacroStation({ onComplete }: { onComplete: () => void }) {
         })}
       </div>
       {!checked
-        ? <button onClick={() => setChecked(true)} disabled={!allPlaced} className="w-full py-3 bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground rounded-xl font-semibold transition">Check My Sorting</button>
+        ? <button type="button" onClick={() => setChecked(true)} disabled={!allPlaced} className="w-full py-3 bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground rounded-xl font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">Check My Sorting</button>
         : (
           <div className="space-y-3">
             <div className={`rounded-xl p-3 text-center ${correct >= 8 ? "bg-green-50 border border-green-200" : "bg-amber-50 border border-amber-200"}`}>
               <p className="font-bold text-sm">{correct}/{MM_ITEMS.length} correct</p>
               <p className="text-xs mt-0.5">{correct >= 8 ? "Great work!" : "Key tip: if the question is about a specific price, firm, or person → Micro. If it's about the whole economy → Macro."}</p>
             </div>
-            <button onClick={onComplete} className="w-full py-3 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold transition">Mark Complete ✓</button>
+            <button type="button" onClick={onComplete} className="w-full py-3 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">Mark Complete ✓</button>
           </div>
         )}
     </div>
@@ -380,14 +390,14 @@ function CircularFlowStation({ onComplete }: { onComplete: () => void }) {
         })}
       </div>
       {!checked
-        ? <button onClick={() => setChecked(true)} disabled={!allPlaced} className="w-full py-3 bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground rounded-xl font-semibold transition">Check My Sorting</button>
+        ? <button type="button" onClick={() => setChecked(true)} disabled={!allPlaced} className="w-full py-3 bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground rounded-xl font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">Check My Sorting</button>
         : (
           <div className="space-y-3">
             <div className={`rounded-xl p-3 text-center ${correct >= 6 ? "bg-green-50 border border-green-200" : "bg-amber-50 border border-amber-200"}`}>
               <p className="font-bold text-sm">{correct}/{FLOW_ITEMS.length} correct</p>
               <p className="text-xs mt-0.5">{correct >= 6 ? "Well done!" : "Key: Product Market = finished goods/services exchanged. Factor Market = resources (labor, land, capital) exchanged."}</p>
             </div>
-            <button onClick={onComplete} className="w-full py-3 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold transition">Mark Complete ✓</button>
+            <button type="button" onClick={onComplete} className="w-full py-3 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">Mark Complete ✓</button>
           </div>
         )}
     </div>
@@ -459,14 +469,14 @@ function SystemsStation({ onComplete }: { onComplete: () => void }) {
         })}
       </div>
       {!checked
-        ? <button onClick={() => setChecked(true)} disabled={!allPlaced} className="w-full py-3 bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground rounded-xl font-semibold transition">Check My Sorting</button>
+        ? <button type="button" onClick={() => setChecked(true)} disabled={!allPlaced} className="w-full py-3 bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground rounded-xl font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">Check My Sorting</button>
         : (
           <div className="space-y-3">
             <div className={`rounded-xl p-3 text-center ${correct >= 6 ? "bg-green-50 border border-green-200" : "bg-amber-50 border border-amber-200"}`}>
               <p className="font-bold text-sm">{correct}/{SYSTEM_ITEMS.length} correct</p>
               <p className="text-xs mt-0.5">{correct >= 6 ? "Great!" : "Most real-world economies today are Mixed — review any misses above."}</p>
             </div>
-            <button onClick={onComplete} className="w-full py-3 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold transition">Mark Complete ✓</button>
+            <button type="button" onClick={onComplete} className="w-full py-3 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">Mark Complete ✓</button>
           </div>
         )}
     </div>
@@ -505,7 +515,7 @@ function RecapStation({ onComplete }: { onComplete: () => void }) {
         <p className="text-lg font-bold">{score}/{RECAP_QS.length} correct</p>
         <p className="text-sm mt-1">{score >= 4 ? "You're ready to take the quiz!" : "Review the stations above before moving to the quiz."}</p>
       </div>
-      <button onClick={onComplete} className="w-full py-3 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold transition">Mark Complete ✓</button>
+      <button type="button" onClick={onComplete} className="w-full py-3 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">Mark Complete ✓</button>
     </div>
   );
 
@@ -513,7 +523,7 @@ function RecapStation({ onComplete }: { onComplete: () => void }) {
     <div className="max-w-lg mx-auto space-y-4">
       <div className="flex items-center justify-between text-xs text-muted-foreground">
         <span>Question {idx + 1} of {RECAP_QS.length}</span>
-        <div className="flex gap-1">{RECAP_QS.map((_, i) => <div key={i} className={`w-2.5 h-2.5 rounded-full ${i < idx ? "bg-green-500" : i === idx ? "bg-primary" : "bg-muted"}`} />)}</div>
+        <div className="flex gap-1" role="img" aria-label={`Progress: question ${idx + 1} of ${RECAP_QS.length}`}>{RECAP_QS.map((_, i) => <div key={i} aria-hidden="true" className={`w-2.5 h-2.5 rounded-full ${i < idx ? "bg-green-500" : i === idx ? "bg-primary" : "bg-muted"}`} />)}</div>
       </div>
       <div className="bg-card border-2 border-border rounded-xl p-4">
         <p className="text-sm font-semibold text-foreground mb-3">{q.q}</p>
@@ -536,8 +546,8 @@ function RecapStation({ onComplete }: { onComplete: () => void }) {
         {checked && <p className={`mt-3 text-xs font-medium ${sel === q.correct ? "text-green-700" : "text-amber-700"}`}>{sel === q.correct ? "✓ Correct! " : "✗ Not quite. "}{q.exp}</p>}
       </div>
       {!checked
-        ? <button onClick={check} disabled={sel === null} className="w-full py-3 bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground rounded-xl font-semibold transition">Check Answer</button>
-        : <button onClick={next} className="w-full py-3 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold transition">{idx + 1 < RECAP_QS.length ? "Next Question →" : "See Results"}</button>
+        ? <button type="button" onClick={check} disabled={sel === null} className="w-full py-3 bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground rounded-xl font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">Check Answer</button>
+        : <button type="button" onClick={next} className="w-full py-3 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">{idx + 1 < RECAP_QS.length ? "Next Question →" : "See Results"}</button>
       }
     </div>
   );
@@ -590,7 +600,7 @@ function QuizStation({ onPass, onFail }: { onPass: (score: number, results: { co
     <div className="max-w-lg mx-auto space-y-4">
       <div className="flex items-center justify-between">
         <span className="text-sm font-semibold text-muted-foreground">Question {cur + 1} of {questions.length}</span>
-        <div className="flex gap-1">{questions.map((_, i) => <div key={i} className={`w-2.5 h-2.5 rounded-full ${i < cur ? (results[i]?.correct ? "bg-green-500" : "bg-red-400") : i === cur ? "bg-primary" : "bg-muted"}`} />)}</div>
+        <div className="flex gap-1" role="img" aria-label={`Progress: question ${cur + 1} of ${questions.length}`}>{questions.map((_, i) => <div key={i} aria-hidden="true" className={`w-2.5 h-2.5 rounded-full ${i < cur ? (results[i]?.correct ? "bg-green-500" : "bg-red-400") : i === cur ? "bg-primary" : "bg-muted"}`} />)}</div>
       </div>
       <div className="bg-card border-2 border-border rounded-xl p-4">
         <p className="text-sm font-semibold text-foreground mb-3">{q.q}</p>
@@ -613,8 +623,8 @@ function QuizStation({ onPass, onFail }: { onPass: (score: number, results: { co
         {checked && <p className={`mt-3 text-xs font-medium ${sel === q.correct ? "text-green-700" : "text-amber-700"}`}>{sel === q.correct ? "✓ Correct! " : "✗ Not quite. "}{q.exp}</p>}
       </div>
       {!checked
-        ? <button onClick={check} disabled={sel === null} className="w-full py-3 bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground rounded-xl font-semibold transition">Check Answer</button>
-        : <button onClick={next} className="w-full py-3 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold transition">{cur + 1 < questions.length ? "Next Question →" : "See Results"}</button>
+        ? <button type="button" onClick={check} disabled={sel === null} className="w-full py-3 bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground rounded-xl font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">Check Answer</button>
+        : <button type="button" onClick={next} className="w-full py-3 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">{cur + 1 < questions.length ? "Next Question →" : "See Results"}</button>
       }
     </div>
   );
@@ -631,7 +641,7 @@ function NotYetScreen({ onRetry }: { onRetry: () => void }) {
         <p className="text-lg font-bold text-amber-800">Not quite there yet</p>
         <p className="text-sm text-amber-700 mt-2">You need 9 out of 10 correct to complete the quiz. This screen cannot be submitted. Only the final Results screen counts.</p>
       </div>
-      <button onClick={onRetry} className="w-full py-3 bg-amber-500 hover:opacity-90 text-white rounded-xl font-semibold transition">← Try the Quiz Again</button>
+      <button type="button" onClick={onRetry} className="w-full py-3 bg-amber-500 hover:opacity-90 text-white rounded-xl font-semibold transition">← Try the Quiz Again</button>
     </div>
   );
 }
@@ -679,14 +689,14 @@ function ResultsScreen({ score, results, onRestart, courseTitle }: {
       </div>
       <div className="bg-card border-2 border-border rounded-xl p-4 space-y-3">
         <div>
-          <label className="text-sm font-semibold text-foreground block mb-1">Your Name (required for credit)</label>
-          <input value={name} onChange={e => setName(e.target.value)} placeholder="First and Last Name"
-            className="w-full border-2 border-border rounded-xl px-3 py-2 text-sm bg-card text-foreground focus:border-primary focus:outline-none" />
+          <label htmlFor="result-name" className="text-sm font-semibold text-foreground block mb-1">Your Name (required for credit)</label>
+          <input id="result-name" value={name} onChange={e => setName(e.target.value)} placeholder="First and Last Name"
+            className="w-full border-2 border-border rounded-xl px-3 py-2 text-sm bg-card text-foreground focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary" />
         </div>
         <div>
-          <label className="text-sm font-semibold text-foreground block mb-1">Exit Ticket: In one sentence, describe a real-world example of opportunity cost from your own life.</label>
-          <textarea value={exitTicket} onChange={e => setExitTicket(e.target.value)} rows={2} placeholder="Your response..."
-            className="w-full border-2 border-border rounded-xl px-3 py-2 text-sm bg-card text-foreground focus:border-primary focus:outline-none resize-none" />
+          <label htmlFor="exit-ticket" className="text-sm font-semibold text-foreground block mb-1">Exit Ticket: In one sentence, describe a real-world example of opportunity cost from your own life.</label>
+          <textarea id="exit-ticket" value={exitTicket} onChange={e => setExitTicket(e.target.value)} rows={2} placeholder="Your response..."
+            className="w-full border-2 border-border rounded-xl px-3 py-2 text-sm bg-card text-foreground focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary resize-none" />
         </div>
       </div>
       <div className="space-y-2">
@@ -698,8 +708,8 @@ function ResultsScreen({ score, results, onRestart, courseTitle }: {
         ))}
       </div>
       <div className="flex gap-3">
-        <button onClick={printPDF} disabled={!name.trim()} className="flex-1 py-3 bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground rounded-xl font-semibold transition text-sm">🖨️ Print PDF</button>
-        <button onClick={onRestart} className="flex-1 py-3 bg-muted hover:bg-accent text-muted-foreground rounded-xl font-semibold transition text-sm">↺ Start Over</button>
+        <button type="button" onClick={printPDF} disabled={!name.trim()} className="flex-1 py-3 bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground rounded-xl font-semibold transition text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">🖨️ Print PDF</button>
+        <button type="button" onClick={onRestart} className="flex-1 py-3 bg-muted hover:bg-accent text-muted-foreground rounded-xl font-semibold transition text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">↺ Start Over</button>
       </div>
     </div>
   );
@@ -738,7 +748,7 @@ function Dashboard({ completed, onSelect, quizUnlocked, onStartQuiz, onSummary }
           <span className="text-sm text-foreground">Need a refresher? View the chapter summary.</span>
         </div>
         <button onClick={onSummary}
-          className="text-xs px-3 py-1.5 rounded-lg bg-card border border-border text-primary font-semibold hover:bg-accent transition-all shrink-0">
+          className="text-xs px-3 py-1.5 rounded-lg bg-card border border-border text-primary font-semibold hover:bg-accent transition-all shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
           Open Summary
         </button>
       </div>
@@ -747,8 +757,8 @@ function Dashboard({ completed, onSelect, quizUnlocked, onStartQuiz, onSummary }
         {STATIONS.map(s => {
           const done = completed.has(s.id);
           return (
-            <button key={s.id} onClick={() => onSelect(s.id)}
-              className={`rounded-xl border-2 p-3 text-left transition ${done ? "border-green-400 bg-green-50" : "border-border bg-card hover:border-primary/40"}`}>
+            <button key={s.id} type="button" onClick={() => onSelect(s.id)}
+              className={`rounded-xl border-2 p-3 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${done ? "border-green-400 bg-green-50" : "border-border bg-card hover:border-primary/40"}`}>
               <span className="text-lg">{done ? "✅" : s.icon}</span>
               <p className="text-sm font-semibold text-foreground mt-1">{s.label}</p>
               <p className="text-xs text-muted-foreground">{s.desc}</p>
@@ -756,8 +766,8 @@ function Dashboard({ completed, onSelect, quizUnlocked, onStartQuiz, onSummary }
           );
         })}
       </div>
-      <button onClick={onStartQuiz} disabled={!quizUnlocked}
-        className={`w-full py-3 rounded-xl font-semibold text-sm transition ${quizUnlocked ? "bg-primary hover:opacity-90 text-primary-foreground" : "bg-muted text-muted-foreground opacity-50 cursor-not-allowed"}`}>
+      <button type="button" onClick={onStartQuiz} disabled={!quizUnlocked}
+        className={`w-full py-3 rounded-xl font-semibold text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary ${quizUnlocked ? "bg-primary hover:opacity-90 text-primary-foreground" : "bg-muted text-muted-foreground opacity-50 cursor-not-allowed"}`}>
         {quizUnlocked ? "🎯 Take the Quiz" : "🔒 Complete all stations to unlock the Quiz"}
       </button>
     </div>
@@ -818,7 +828,7 @@ function Header({ station, completed, onNav, courseTitle, courseSubtitle, hubUrl
             }
             return (
               <button key={s.id} onClick={() => onNav(s.id)}
-                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                   active ? "bg-primary text-primary-foreground" :
                   done   ? "bg-sidebar-accent text-sidebar-foreground/90" :
                            "text-sidebar-foreground/75 hover:text-white"

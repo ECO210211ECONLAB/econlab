@@ -39,14 +39,9 @@
     .lab-card.completed .lab-chapter-badge { background:var(--green); }
     .lab-title { font-size:15px; font-weight:700; color:var(--text); line-height:1.3; }
     .lab-desc { font-size:12px; color:var(--muted); line-height:1.5; }
-    .lab-footer { display:flex; align-items:center; justify-content:space-between; }
-    .lab-status { font-size:11px; font-weight:600; }
-    .lab-status.done { color:var(--green); }
-    .lab-status.pending { color:var(--muted); }
-    .launch-btn { background:var(--navy); color:white; font-size:12px; font-weight:700; padding:7px 16px; border-radius:99px; border:none; cursor:pointer; transition:background 0.15s; text-decoration:none; display:inline-block; }
-    .launch-btn:hover { background:var(--amber); }
-    .lab-card.completed .launch-btn { background:var(--green); }
     .lab-card.coming-soon { opacity:0.55; pointer-events:none; border-style:dashed; }
+    .lab-done-badge { display:none; font-size:10px; font-weight:700; color:var(--green); background:var(--green-bg); border:1.5px solid var(--green-border); border-radius:99px; padding:2px 8px; margin-top:6px; width:fit-content; }
+    .lab-card.completed .lab-done-badge { display:block; }
     footer { text-align:center; padding:24px; font-size:11px; color:var(--muted); border-top:1px solid var(--border); }
   </style>
 </head>
@@ -61,7 +56,7 @@
   </svg>
   <div>
     <div class="header-title">ECO 211 ECONLAB</div>
-    <div class="header-sub">Microeconomics</div>
+    <div class="header-sub">Based on OpenStax Microeconomics 3e Textbook</div>
   </div>
   <div class="header-progress">
     <div class="header-progress-label" id="progress-label">0 of 1 labs complete</div>
@@ -91,13 +86,9 @@
         <div>
           <div class="lab-title">Introduction to Economics</div>
           <div class="lab-desc">Scarcity, opportunity cost, micro vs. macro, factors of production, circular flow, and economic systems.</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-ch1">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/eco211-lab-ch1-dist-public-A_3lIPQ_R4K6b8WyAGTqtg" target="_blank">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
     <a class="lab-card" href="https://www.perplexity.ai/computer/a/eco-211-econlab-chapter-7-prod-I7W5TB9zTzmSN_oOKwBt1w"
        target="_blank" data-lab="ch7" role="listitem"
@@ -107,13 +98,9 @@
         <div>
           <div class="lab-title">Production, Costs and Industry Structure</div>
           <div class="lab-desc">Explicit vs. implicit costs, accounting vs. economic profit, marginal product, cost curves, LRAC, and market structures.</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-ch7">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/eco-211-econlab-chapter-7-prod-I7W5TB9zTzmSN_oOKwBt1w" target="_blank">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
     <a class="lab-card" href="https://www.perplexity.ai/computer/a/eco-211-econlab-chapter-8-perf-L5HZ.CplT.qzpaqppJodyQ"
        target="_blank" data-lab="ch8" role="listitem"
@@ -123,13 +110,9 @@
         <div>
           <div class="lab-title">Perfect Competition</div>
           <div class="lab-desc">Price takers, MR = MC profit rule, shutdown vs. operate decisions, long-run entry and exit, and productive and allocative efficiency.</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-ch8">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/eco-211-econlab-chapter-8-perf-L5HZ.CplT.qzpaqppJodyQ" target="_blank">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
     <a class="lab-card" href="https://www.perplexity.ai/computer/a/eco-211-econlab-chapter-9-mono-SC_fJzPuQf2KySrUuEZIPA"
        target="_blank" data-lab="ch9" role="listitem"
@@ -139,13 +122,9 @@
         <div>
           <div class="lab-title">Monopoly</div>
           <div class="lab-desc">Barriers to entry, MR vs. demand, profit-maximizing monopolist, comparison with perfect competition, and natural monopoly regulation.</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-ch9">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/eco-211-econlab-chapter-9-mono-SC_fJzPuQf2KySrUuEZIPA" target="_blank">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
     <a class="lab-card" href="https://www.perplexity.ai/computer/a/eco-211-econlab-chapter-10-mon-Ft_hihT8QZ6VV2ThfYhtBA"
        target="_blank" data-lab="ch10" role="listitem"
@@ -155,13 +134,9 @@
         <div>
           <div class="lab-title">Monopolistic Competition &amp; Oligopoly</div>
           <div class="lab-desc">Product differentiation, short-run vs. long-run equilibrium, prisoner's dilemma, cartel formation and breakdown.</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-ch10">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/eco-211-econlab-chapter-10-mon-Ft_hihT8QZ6VV2ThfYhtBA" target="_blank">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
     <a class="lab-card" href="https://www.perplexity.ai/computer/a/eco-211-econlab-chapter-11-mon-LqPsyw5qT429oNaT3Us7oA"
        target="_blank" data-lab="ch11" role="listitem"
@@ -171,13 +146,9 @@
         <div>
           <div class="lab-title">Monopoly &amp; Antitrust Policy</div>
           <div class="lab-desc">HHI & concentration ratios, merger review, legal vs. illegal practices, natural monopoly regulation, deregulation, and regulatory capture.</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-ch11">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/eco-211-econlab-chapter-11-mon-LqPsyw5qT429oNaT3Us7oA" target="_blank">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
     <a class="lab-card" href="https://www.perplexity.ai/computer/a/eco-211-econlab-review-lab-1-c-aKh9DrGWS1.EqNT2mnTcfQ"
        target="_blank" data-lab="review1" role="listitem"
@@ -187,13 +158,9 @@
         <div>
           <div class="lab-title">Review Lab 1 — Chapters 7–11</div>
           <div class="lab-desc">Cumulative synthesis: market structures, costs, profit, market power, antitrust. 4 review sections + 15-question quiz (13/15 required).</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-review1">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/eco-211-econlab-review-lab-1-c-aKh9DrGWS1.EqNT2mnTcfQ" target="_blank">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
     <a class="lab-card" href="https://www.perplexity.ai/computer/a/eco-211-econlab-chapter-12-env-llSXKEfuTbeo3pTnFrR0rw"
        target="_blank" data-lab="ch12" role="listitem"
@@ -203,13 +170,9 @@
         <div>
           <div class="lab-title">Environmental Protection &amp; Negative Externalities</div>
           <div class="lab-desc">Externalities, command-and-control vs. market-oriented tools, pollution charges, cap-and-trade, Coase theorem, PPF tradeoff.</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-ch12">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/eco-211-econlab-chapter-12-env-llSXKEfuTbeo3pTnFrR0rw" target="_blank">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
     <a class="lab-card" href="https://www.perplexity.ai/computer/a/eco-211-econlab-chapter-13-pos-Qi.j4AUqTXC0S8ykGM9lkw"
        target="_blank" data-lab="ch13" role="listitem"
@@ -219,13 +182,9 @@
         <div>
           <div class="lab-title">Positive Externalities &amp; Public Goods</div>
           <div class="lab-desc">Innovation spillovers, government R&amp;D policy, 4 types of goods, free rider problem, tragedy of the commons.</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-ch13">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/eco-211-econlab-chapter-13-pos-Qi.j4AUqTXC0S8ykGM9lkw" target="_blank">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
     <a class="lab-card" href="https://www.perplexity.ai/computer/a/eco-211-econlab-review-lab-2-c-JNEJ.tDURW2vrnlwT1JUSg"
        target="_blank" data-lab="review2" role="listitem"
@@ -235,13 +194,9 @@
         <div>
           <div class="lab-title">Review Lab 2 — Chapters 12–13</div>
           <div class="lab-desc">Cumulative synthesis: externalities, environmental policy tools, 4 types of goods, innovation spillovers. 4 sections + 15-question quiz (13/15 required).</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-review2">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/eco-211-econlab-review-lab-2-c-JNEJ.tDURW2vrnlwT1JUSg" target="_blank">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
     <a class="lab-card" href="https://www.perplexity.ai/computer/a/eco-211-practice-final-exam-wL4BuH_hSD6Zl7IMffqEIg"
        target="_blank" data-lab="practicefinal" role="listitem"
@@ -251,18 +206,14 @@
         <div>
           <div class="lab-title">Practice Final Exam</div>
           <div class="lab-desc">40 practice questions covering all exam topics (Ch7–13). All question types: MC, select-all, matching, ranking. Immediate feedback + printable PDF results by chapter.</div>
+          <div class="lab-done-badge">✓ Completed</div>
         </div>
-      </div>
-      <div class="lab-footer">
-        <span class="lab-status pending" id="status-practicefinal">Not started</span>
-        <a class="launch-btn" href="https://www.perplexity.ai/computer/a/eco-211-practice-final-exam-wL4BuH_hSD6Zl7IMffqEIg" target="_blank">Launch →</a>
-      </div>
-    </a>
+      </div></a>
 
   </div>
 </main>
 
-<footer role="contentinfo">ECO 211 · Principles of Microeconomics · OpenStax · Labs built with ECO 211 ECONLAB</footer>
+<footer role="contentinfo">Access course textbook for free at <a href="https://openstax.org/books/principles-microeconomics-3e/pages/1-introduction" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;">https://openstax.org/books/principles-microeconomics-3e/pages/1-introduction</a></footer>
 
 <script>
   const LABS = ['ch7','ch8','ch9','ch10','ch11','review1','ch12','ch13','review2'];
@@ -284,14 +235,9 @@
     document.getElementById('stat-complete').textContent = count;
     LABS.forEach(function(lab) {
       const card = document.querySelector('[data-lab="' + lab + '"]');
-      const status = document.getElementById('status-' + lab);
-      if (!card || !status) return;
+      if (!card) return;
       if (completed.indexOf(lab) !== -1) {
         card.classList.add('completed');
-        status.textContent = '✓ Completed';
-        status.className = 'lab-status done';
-        const btn = card.querySelector('a.launch-btn');
-        if (btn) btn.textContent = 'Review →';
       }
     });
   }

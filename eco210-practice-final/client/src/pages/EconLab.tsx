@@ -663,24 +663,185 @@ const QUESTION_BANK: Question[] = [
     correct: [0, 2, 3, 5],
     exp: "GDP includes new domestic production: new construction (A), government purchases of new goods (C), household services spending (D), and exports (F). Used goods (B) are excluded; dividend income (E) is a financial transfer, not new production."
   },
+
+  // ── Ch7 · Growth — new questions ──────────────────────────────────────
+  {
+    id: 46, type: "mc", topic: "Ch7 · Growth",
+    q: "Which of the following best explains why technology is considered the most powerful driver of long-run economic growth?",
+    opts: [
+      "Technology increases the labor force participation rate, raising aggregate demand",
+      "Technology shifts the LRAS curve rightward, raising potential GDP without requiring more workers or capital",
+      "Technology lowers interest rates, encouraging more private investment",
+      "Technology reduces government spending needs, freeing up fiscal resources"
+    ],
+    correct: 1,
+    exp: "Technology (GPS, computers, internet, AI) shifts the LRAS rightward — the economy can produce more output with the same or fewer inputs. Unlike adding more workers or capital, technological progress is the primary engine of sustained per-capita income growth."
+  },
+  {
+    id: 47, type: "mc", topic: "Ch7 · Growth",
+    q: "The U.S. interstate highway system (built largely in the 1950s–70s) boosted worker productivity for decades afterward. This is an example of which source of long-run economic growth?",
+    opts: [
+      "Human capital accumulation through education",
+      "Rational expectations adjusting inflation forecasts",
+      "Physical capital deepening — more and better infrastructure per worker",
+      "Institutional improvement through deregulation"
+    ],
+    correct: 2,
+    exp: "The interstate highway system is physical capital — roads, bridges, and infrastructure that allow workers and businesses to produce more output per hour worked. Physical capital deepening (more/better tools per worker) raises labor productivity and shifts LRAS rightward."
+  },
+
+  // ── Ch12+13 · Keynesian/Neoclassical — 5 new questions ────────────────
+  {
+    id: 48, type: "mc", topic: "Ch12+13 · Keynesian/Neoclassical",
+    q: "The Keynesian explanation for why a recession can persist without government intervention is:",
+    opts: [
+      "Rational expectations cause workers to immediately accept lower wages, keeping unemployment high",
+      "Sticky wages and prices mean that demand falls but the price level barely adjusts — output drops instead",
+      "The LRAS curve shifts left when animal spirits fall, reducing potential GDP",
+      "Crowding out prevents private investment from filling the gap left by falling consumer demand"
+    ],
+    correct: 1,
+    exp: "The core Keynesian mechanism: wages resist cuts (bosses fear morale damage; menu costs make repricing expensive). When AD falls, prices stay put — so the adjustment comes through output and employment instead. This is the 'Keynesian zone' where the SRAS is nearly horizontal."
+  },
+  {
+    id: 49, type: "mc", topic: "Ch12+13 · Keynesian/Neoclassical",
+    q: "If MPC = 0.8 and the government injects $500 billion in new spending, what is the total expected increase in GDP according to the Keynesian expenditure multiplier?",
+    opts: [
+      "$500 billion",
+      "$1,000 billion",
+      "$2,000 billion",
+      "$2,500 billion"
+    ],
+    correct: 3,
+    exp: "Multiplier = 1 ÷ (1 − MPC) = 1 ÷ 0.2 = 5. Total GDP impact = 5 × $500B = $2,500 billion. Each dollar of spending becomes someone else's income, which they spend again — the ripple effect amplifies the original injection. The multiplier also works in REVERSE (e.g., 1929 investment collapse)."
+  },
+  {
+    id: 50, type: "multi", topic: "Ch12+13 · Keynesian/Neoclassical",
+    q: "According to the Keynesian policy toolkit, which of the following actions would help close a recessionary gap? Select ALL that apply.",
+    opts: [
+      "Increase government spending on infrastructure",
+      "Cut income taxes to raise household disposable income",
+      "Central bank lowers interest rates to stimulate investment",
+      "Reduce government spending to balance the budget",
+      "Central bank raises interest rates to control inflation"
+    ],
+    correct: [0, 1, 2],
+    exp: "To close a recessionary gap, Keynesians prescribe expansionary policy: ↑ G (shifts AD right), ↓ taxes (↑ disposable income → ↑ C → ↑ AD), and ↓ interest rates (↑ I → ↑ AD). Options D and E are contractionary — they shift AD left, deepening the recession."
+  },
+  {
+    id: 51, type: "match", topic: "Ch12+13 · Keynesian/Neoclassical",
+    instruction: "Match each characteristic to the correct school of economic thought.",
+    items: [
+      "Wages and prices adjust slowly — markets can get stuck",
+      "Aggregate Demand is the key driver of output in the short run",
+      "The economy self-corrects via flexible wages and prices — no intervention needed",
+      "Policy should focus on stable rules and supply-side reforms",
+      "Potential GDP (LRAS) anchors the long-run outcome",
+      "Animal spirits make investment volatile and unpredictable",
+      "The long-run Phillips Curve is vertical at the natural rate",
+      "Countercyclical fiscal and monetary policy is the primary tool"
+    ],
+    categories: ["Keynesian", "Neoclassical"],
+    correct:    [0, 0, 1, 1, 1, 0, 1, 0],
+    exp: "Keynesian: sticky wages/prices, AD drives output, animal spirits, active countercyclical policy. Neoclassical: flexible prices/self-correction, stable rules, supply-side focus, vertical LRPC at natural rate, potential GDP as anchor."
+  },
+  {
+    id: 52, type: "mc", topic: "Ch12+13 · Keynesian/Neoclassical",
+    q: "The 1973 oil embargo caused both inflation AND unemployment to rise simultaneously — a phenomenon called stagflation. Why did this challenge the Keynesian model?",
+    opts: [
+      "Keynesian theory predicted that fiscal policy could not affect unemployment",
+      "The simple Keynesian Phillips Curve showed a tradeoff between inflation and unemployment — it had no explanation for both rising at the same time",
+      "Keynesians believed the LRAS was vertical, ruling out any supply-side effects",
+      "Rational expectations theory had already predicted this outcome, discrediting Keynesianism before 1973"
+    ],
+    correct: 1,
+    exp: "The short-run Phillips Curve (SRPC) implied a tradeoff: lower unemployment = higher inflation. But the 1973 oil shock was a supply shock — SRAS collapsed leftward, pushing both inflation AND unemployment up simultaneously. This 'stagflation' had no place in the simple Keynesian demand-management framework and opened the door for Neoclassical supply-side thinking."
+  },
+
+  // ── Ch14 · Money — 1 new question ─────────────────────────────────────
+  {
+    id: 53, type: "mc", topic: "Ch14 · Money",
+    q: "Which of the following best explains why savings accounts are now classified as part of M1 (and therefore also M2)?",
+    opts: [
+      "The Federal Reserve raised reserve requirements on savings accounts in 2015",
+      "The Fed eliminated Regulation D's limit on monthly savings account withdrawals in 2020, making savings accounts functionally equivalent to checking accounts",
+      "Congress passed legislation reclassifying all bank deposits as M1 after the 2008 financial crisis",
+      "Savings accounts were always part of M1 — the classification has never changed"
+    ],
+    correct: 1,
+    exp: "In April 2020 the Fed permanently eliminated Regulation D's 6-transaction-per-month limit on savings accounts. With no withdrawal restrictions, savings accounts became functionally equivalent to checking accounts — so the Fed reclassified them into M1. This is why M1 appeared to jump dramatically in 2020."
+  },
+
+  // ── Ch15 · Monetary Policy — 2 new questions ──────────────────────────
+  {
+    id: 54, type: "mc", topic: "Ch15 · Monetary Policy",
+    q: "Before 2008, the Fed used open market operations (buying/selling Treasury bonds) as its primary tool because reserves were scarce. Why is this tool less effective as the PRIMARY lever in today's ample-reserves environment?",
+    opts: [
+      "The Fed is legally prohibited from conducting open market operations post-2008",
+      "With trillions in excess reserves already in the system, small bond purchases or sales barely move the federal funds rate — the floor tools (IORB, ON RRP) now set the rate directly",
+      "Open market operations only affect the discount rate, not the federal funds rate",
+      "Banks no longer need reserves since the reserve requirement was eliminated in 2020"
+    ],
+    correct: 1,
+    exp: "Pre-2008: reserves were scarce, so small OMO changes shifted the FFR significantly. Post-2008 QE flooded the system with excess reserves — the FFR hit zero and stayed there regardless of OMO size. Today the Fed controls rates through the IORB (floor) and ON RRP (sub-floor), which directly set the rate banks earn on reserves. OMO still matters at the margins but is no longer the primary steering mechanism."
+  },
+  {
+    id: 55, type: "mc", topic: "Ch15 · Monetary Policy",
+    q: "During the 2008 financial crisis the Fed dropped rates to near zero and kept them there for years (the 'Zero Lower Bound'). This situation is most associated with which Keynesian concern?",
+    opts: [
+      "Crowding out — low rates caused government borrowing to displace private investment",
+      "The liquidity trap — conventional monetary policy loses traction when rates can't go lower, making fiscal policy relatively more important",
+      "Rational expectations — firms immediately anticipated the rate cuts and offset them with higher prices",
+      "The money multiplier collapsed because the Fed raised reserve requirements to 100%"
+    ],
+    correct: 1,
+    exp: "At the Zero Lower Bound (ZLB), the Fed cannot cut rates further — conventional monetary policy is exhausted. This 'liquidity trap' is a core Keynesian concern: when monetary policy is impotent, fiscal stimulus becomes the primary tool. The Fed responded with unconventional tools (QE, forward guidance) to work around the ZLB constraint."
+  },
+
+  // ── Ch17 · Fiscal Policy — 2 new questions ────────────────────────────
+  {
+    id: 56, type: "mc", topic: "Ch17 · Fiscal Policy",
+    q: "A Neoclassical economist argues that a government infrastructure spending program will be less effective than the Keynesian multiplier predicts because of 'crowding out.' What is the crowding out mechanism?",
+    opts: [
+      "Government spending directly reduces consumer confidence, lowering consumption",
+      "The government borrows to fund the spending, raising interest rates, which reduces private investment — partially or fully offsetting the stimulus",
+      "Infrastructure spending shifts LRAS leftward by diverting workers from the private sector",
+      "Automatic stabilizers counteract the discretionary spending dollar-for-dollar"
+    ],
+    correct: 1,
+    exp: "Crowding out: government deficit spending requires borrowing → bond supply increases → interest rates rise → private investment falls. In the extreme (full crowding out), the stimulus is entirely offset. In practice, crowding out is partial — but it's a key reason Neoclassicals are skeptical of fiscal multipliers, especially when the economy is near potential GDP."
+  },
+  {
+    id: 57, type: "multi", topic: "Ch17 · Fiscal Policy",
+    q: "Which of the following are characteristics of automatic stabilizers — as opposed to discretionary fiscal policy? Select ALL that apply.",
+    opts: [
+      "They activate immediately without new legislation when the economy weakens",
+      "They require a congressional vote and presidential signature before taking effect",
+      "Unemployment insurance payments rise automatically during a recession",
+      "The progressive income tax reduces tax revenue automatically when incomes fall",
+      "They are subject to the recognition, legislative, and implementation lag problem"
+    ],
+    correct: [0, 2, 3],
+    exp: "Automatic stabilizers (unemployment insurance, food stamps, progressive income tax) kick in immediately without new legislation — this is their key advantage over discretionary policy. When the economy weakens, tax revenues fall and transfer payments rise automatically, supporting aggregate demand. Options B and E describe discretionary fiscal policy, which is subject to all three time lags."
+  },
 ];
 
 // ─────────────────────────────────────────────
 // Draw 30 questions, balanced by type
+// Pool: 57 questions across 10 topic areas
 // ─────────────────────────────────────────────
 function drawQuestions(): Question[] {
-  // Ensure good type mix — guarantee at least 2 of each type, then fill rest randomly
   const byType: { [k: string]: Question[] } = { mc: [], multi: [], match: [], order: [] };
   for (const q of QUESTION_BANK) byType[q.type].push(q);
 
   const drawn: Question[] = [];
-  // Take all matching (5 unique matching sets)
-  drawn.push(...shuffle(byType.match).slice(0, 5));
-  // Take both ordering questions
+  // 6 matching questions (9 available — draw 6 for variety)
+  drawn.push(...shuffle(byType.match).slice(0, 6));
+  // Both ordering questions (2 available)
   drawn.push(...shuffle(byType.order).slice(0, 2));
-  // Take 12 multi-select
+  // 10 multi-select (12 available)
   drawn.push(...shuffle(byType.multi).slice(0, 10));
-  // Fill remaining with MC
+  // Fill remaining with MC to reach 30 total
   const remaining = 30 - drawn.length;
   drawn.push(...shuffle(byType.mc).slice(0, remaining));
 
@@ -1034,9 +1195,9 @@ function IntroScreen({ onStart }: { onStart: () => void }) {
           <p className="text-muted-foreground text-sm">Principles of Macroeconomics</p>
         </div>
         <div className="bg-muted rounded-xl p-4 text-left space-y-2 text-sm text-foreground">
-          <p><span className="font-semibold">30 questions</span> — drawn randomly from a question bank of 45</p>
+          <p><span className="font-semibold">30 questions</span> — drawn randomly from a question bank of 57</p>
           <p><span className="font-semibold">Question types:</span> multiple choice, multi-select, matching, and sequencing</p>
-          <p><span className="font-semibold">Coverage:</span> Ch6 (GDP) · Ch7 (Growth) · Ch8 (Unemployment) · Ch9 (Inflation) · Ch11 (AD-AS) · Ch14 (Money) · Ch15 (Monetary Policy) · Ch17 (Fiscal Policy)</p>
+          <p><span className="font-semibold">Coverage:</span> Ch6 (GDP) · Ch7 (Growth) · Ch8 (Unemployment) · Ch9 (Inflation) · Ch11 (AD-AS) · Ch12+13 (Keynesian &amp; Neoclassical) · Ch14 (Money) · Ch15 (Monetary Policy) · Ch17 (Fiscal Policy)</p>
           <p><span className="font-semibold">Feedback:</span> Correct answer and explanation shown after each question</p>
           <p><span className="font-semibold">Submission:</span> Print your Results screen as a PDF and submit to Brightspace</p>
         </div>
