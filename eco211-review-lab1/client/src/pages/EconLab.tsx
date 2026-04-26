@@ -755,7 +755,8 @@ export default function EconLab() {
                     className={`rounded-xl border-2 p-4 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary ${done ? "border-green-400 bg-green-50" : "border-border bg-card hover:border-primary/40"}`}>
                     <div className="flex items-center justify-between mb-1">
                       <span className={`text-sm font-bold ${done ? "text-green-700" : "text-foreground"}`}>{s.label}</span>
-                      {done && <span className="text-green-600 text-lg">✓</span>}
+                      {done && sectionScores[s.id] && <span className="text-xs font-bold bg-green-100 text-green-700 border border-green-300 rounded-full px-2 py-0.5">{sectionScores[s.id].score}/{sectionScores[s.id].total} ✓</span>}
+                      {done && !sectionScores[s.id] && <span className="text-green-600 text-lg">✓</span>}
                     </div>
                     <span className="text-xs text-muted-foreground">{done ? "Completed" : s.desc}</span>
                   </button>
