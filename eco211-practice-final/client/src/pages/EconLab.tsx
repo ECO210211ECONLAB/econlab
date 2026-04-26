@@ -29,7 +29,7 @@ const QUESTION_BANK: Question[] = [
   {
     id: 1, type: "order", topic: "Ch7 · Market Structures",
     instruction: "Rank the following market structures from the one with the MOST firms (1) to the one with the FEWEST firms (4).",
-    steps: ["Monopoly", "Oligopoly", "Monopolistic Competition", "Perfect Competition"],
+    steps: ["Perfect Competition", "Monopolistic Competition", "Oligopoly", "Monopoly"],
     exp: "Perfect Competition has the most firms (thousands of price-takers). Monopolistic Competition has many firms. Oligopoly has a small number of large firms. Monopoly has one firm.",
   },
   {
@@ -265,53 +265,11 @@ const QUESTION_BANK: Question[] = [
     correct: [0, 1, 2, 3, 4],
     exp: "Oligopoly: few large firms, high barriers. Monopoly: one firm, unique product. Monopolistic Competition: many differentiated firms, easy entry. Perfect Competition: many identical products. Mutual interdependence is the defining feature of oligopoly — each firm's strategy depends on rivals' reactions.",
   },
-  {
-    id: 20, type: "mc", topic: "Ch10 · Monopolistic Competition Trade-offs",
-    q: "What is the PRIMARY social cost of monopolistic competition compared to perfect competition?",
-    opts: [
-      "Monopolistic competitors earn permanent economic profits at consumers' expense.",
-      "Firms operate with excess capacity and charge P > MC, resulting in both productive and allocative inefficiency.",
-      "Monopolistic competition eliminates all product variety from the market.",
-      "Firms in monopolistic competition face no competition and behave like monopolists.",
-      "Advertising in monopolistic competition is always wasteful and provides no consumer benefit.",
-    ],
-    correct: 1,
-    exp: "The social cost of monopolistic competition: firms produce below minimum ATC (productive inefficiency) and charge P > MC (allocative inefficiency). These arise because each firm faces a downward-sloping demand curve rather than the horizontal curve of perfect competition.",
-  },
-  {
-    id: 21, type: "mc", topic: "Ch10 · Advertising",
-    q: "From an economics perspective, why might advertising in monopolistic competition be considered partially BENEFICIAL to society even though it raises costs?",
-    opts: [
-      "Advertising reduces average total cost by increasing the scale of production.",
-      "Advertising provides consumers with information about product characteristics, helping them find better matches for their preferences.",
-      "Advertising eliminates the downward-sloping demand curve, making firms more like perfect competitors.",
-      "Advertising guarantees that the advertising firm achieves allocative efficiency.",
-      "Advertising reduces barriers to entry by making it easier for new firms to enter.",
-    ],
-    correct: 1,
-    exp: "Advertising can be beneficial when it conveys genuine information — helping consumers find products that suit them. The debate in economics is between informative advertising (socially useful) and persuasive advertising (primarily redistributes demand without adding value). Monopolistic competition involves both.",
-  },
+
+
   // ── Ch10: Oligopoly & Game Theory ────────────────────────────────────────
-  {
-    id: 22, type: "mc", topic: "Ch10 · Game Theory",
-    q: "In the game matrix below, Player Row can choose Top or Bottom; Player Column can choose Left or Right. Payoffs are (Row, Column):\n\n• Top/Left: ($8, $6)  • Top/Right: ($3, $9)\n• Bottom/Left: ($12, $4)  • Bottom/Right: ($5, $7)\n\nWhat is Player Row's payoff if Row chooses Bottom and Column chooses Right?",
-    opts: ["$12", "$4", "$5", "$7"],
-    correct: 2,
-    exp: "Reading the matrix: Bottom/Right gives payoffs of ($5, $7). Player Row (first number) receives $5. Player Column (second number) receives $7.",
-  },
-  {
-    id: 23, type: "mc", topic: "Ch10 · Prisoner's Dilemma",
-    q: "Two competing airlines (SkyWing and AirBridge) can each set fares as High or Low. Profits (in $millions): High/High: each earns $8M. High/Low: SkyWing earns $2M, AirBridge earns $14M. Low/High: SkyWing earns $14M, AirBridge earns $2M. Low/Low: each earns $4M. If both airlines act in their own self-interest, what is the Nash equilibrium?",
-    opts: [
-      "Both set High fares, each earning $8M — the cooperative outcome.",
-      "SkyWing sets Low, AirBridge sets High — SkyWing earns $14M.",
-      "Both set Low fares, each earning $4M — the dominant strategy equilibrium.",
-      "Both set High fares after negotiating a secret agreement.",
-      "AirBridge sets Low, SkyWing sets High — AirBridge earns $14M.",
-    ],
-    correct: 2,
-    exp: "This is a prisoner's dilemma. For each airline, Low is the dominant strategy regardless of what the rival does (Low beats High by $14M vs $8M if rival goes High, and $4M vs $2M if rival goes Low). Nash equilibrium: both choose Low → $4M each, despite $8M/$8M being collectively better.",
-  },
+
+
   {
     id: 24, type: "mc", topic: "Ch10 · Oligopoly",
     q: "Two competing gas stations located across the street from each other have never communicated or made any agreement, yet they always charge exactly the same price. Each monitors the other's price and adjusts immediately. This is an example of:",
@@ -559,68 +517,212 @@ const QUESTION_BANK: Question[] = [
     correct: [0, 1, 2, 3, 4],
     exp: "The 2×2 grid: Private (excl+rival), Club (excl+non-rival), Common (non-excl+rival), Public (non-excl+non-rival). Education is a special case — excludable (tuition) but generates positive externalities, so private provision underproduces relative to the social optimum.",
   },
+
+  // ── Ch8 · Perfect Competition (new) ──────────────────────────────────
+  {
+    id: 41, type: "mc", topic: "Ch8 · Shutdown Decision",
+    q: "A raspberry farm has market price $2.50/pack. Its Average Variable Cost at the profit-maximizing quantity is $2.80/pack and Average Total Cost is $3.50/pack. What should the firm do in the short run?",
+    opts: [
+      "Continue operating — price covers part of total cost.",
+      "Shut down immediately — price is below average variable cost.",
+      "Continue operating — any revenue is better than zero.",
+      "Shut down — any loss means shutdown is optimal in the short run.",
+    ],
+    correct: 1,
+    exp: "Shutdown rule: shut down if Price < AVC. Here P = $2.50 < AVC = $2.80 — the firm cannot cover variable costs (workers, materials). Staying open increases losses. If P were between AVC and ATC (loss but covering variable costs), the firm should stay open in the short run to minimize losses.",
+  },
+  {
+    id: 42, type: "mc", topic: "Ch8 · Long-Run Entry & Exit",
+    q: "In a perfectly competitive market, a firm is currently earning positive economic profit. What will happen in the long run?",
+    opts: [
+      "The firm keeps above-normal profits since it earned them first.",
+      "New firms enter, supply increases, price falls until economic profit returns to zero.",
+      "The firm lowers its price to prevent new entrants from competing.",
+      "The government imposes a windfall profit tax, returning profit to consumers.",
+    ],
+    correct: 1,
+    exp: "Positive economic profit attracts new entrants. More firms increase market supply, driving price down until P = minimum ATC and economic profit = 0. This is long-run equilibrium: P = MR = MC = AC. The gold rush analogy from your slides: profits attract prospectors until the gold runs out.",
+  },
+  {
+    id: 43, type: "multi", topic: "Ch8 · Industry Types",
+    q: "Which of the following correctly describe an INCREASING-COST industry in the long run? Select ALL that apply.",
+    opts: [
+      "As demand rises and new firms enter, input prices rise (scarce workers get bid up).",
+      "The long-run supply curve is upward-sloping.",
+      "As demand rises and new firms enter, costs fall due to economies of scale.",
+      "Entry of new firms drives the long-run equilibrium price higher than the original price.",
+      "The long-run supply curve is downward-sloping.",
+    ],
+    correct: [0, 1, 3],
+    exp: "In an increasing-cost industry, expansion bids up key input prices. Each new firm faces higher costs, so the long-run equilibrium price is higher — producing an upward-sloping long-run supply curve. Options C and E describe a decreasing-cost industry (tech industries benefiting from economies of scale).",
+  },
+  // ── Ch11 · Monopoly & Antitrust (new) ─────────────────────────────────
+  {
+    id: 44, type: "mc", topic: "Ch11 · HHI & Concentration",
+    q: "An industry has 5 firms with market shares of 40%, 30%, 15%, 10%, and 5%. What is the approximate HHI, and how would the FTC likely view a major merger in this market?",
+    opts: [
+      "HHI ≈ 100; the FTC would likely approve any merger.",
+      "HHI ≈ 2,750; above 1,800 — the FTC would likely challenge a merger between the two largest firms.",
+      "HHI ≈ 10,000; this is a pure monopoly.",
+      "HHI ≈ 500; below 1,000 — the FTC would likely approve with no scrutiny.",
+    ],
+    correct: 1,
+    exp: "HHI = 40² + 30² + 15² + 10² + 5² = 1,600 + 900 + 225 + 100 + 25 = 2,850 (≈ 2,750 range). Above 1,800 = highly concentrated — FTC likely to challenge mergers among top firms. HHI squares each share, giving heavy weight to the largest firm. A merger of the top two (40%+30%=70%) would push HHI dramatically higher.",
+  },
+  {
+    id: 45, type: "multi", topic: "Ch11 · Antitrust Law",
+    q: "Which of the following are examples of ILLEGAL anticompetitive behavior under U.S. antitrust law? Select ALL that apply.",
+    opts: [
+      "Three competing airlines secretly agree to charge identical fares on overlapping routes.",
+      "A pharmaceutical company earns high profits from a valid patent on a drug.",
+      "Two vitamin manufacturers agree each will only sell to certain customers, dividing the market.",
+      "A large firm prices below average variable cost to drive a new entrant out of business.",
+      "A merger between two small firms in a market with 50+ competitors.",
+    ],
+    correct: [0, 2, 3],
+    exp: "Price-fixing cartels (A) and market allocation schemes (C) are per se illegal under the Sherman Antitrust Act. Predatory pricing below AVC (D) is illegal when intent is to destroy competition (classic case from slides: International Vitamin Cartel). Having a patent monopoly (B) is legal — innovation-based monopoly is protected. A merger of tiny firms in a competitive market (E) raises no antitrust concern.",
+  },
+  {
+    id: 46, type: "match", topic: "Ch11 · Regulatory Options",
+    instruction: "Match each natural monopoly regulatory approach on the left with its key characteristic on the right.",
+    items: [
+      "Unregulated Monopoly",
+      "Price = Marginal Cost (P = MC)",
+      "Price = Average Cost (P = AC)",
+      "Price Cap Regulation",
+    ],
+    categories: [
+      "Theoretically efficient but requires government subsidy — firm loses money at this price",
+      "Firm sets MR = MC, earns high profit, underproduces — consumers harmed",
+      "Firm covers all costs and earns normal profit — most common practical approach",
+      "Regulator sets maximum price for several years; firm profits by cutting costs faster than the cap",
+    ],
+    correct: [1, 0, 2, 3],
+    exp: "Unregulated monopoly maximizes profit (MR=MC) — high price, low output, consumers harmed. P=MC is socially optimal but firm loses money without subsidy. P=AC lets the firm break even — most commonly used in practice. Price cap gives the firm cost-cutting incentives since savings become profit.",
+  },
+  {
+    id: 47, type: "mc", topic: "Ch11 · Deregulation",
+    q: "The 1978 Airline Deregulation Act removed government control over fares and routes. Which best describes the long-run effect?",
+    opts: [
+      "Airfares rose as airlines competed for profit rather than accepting regulated returns.",
+      "No meaningful change — regulated and deregulated markets produce identical outcomes.",
+      "Airfares dropped roughly one-third over two decades and the number of air passengers doubled.",
+      "Service quality collapsed — deregulation caused a dramatic rise in safety incidents.",
+    ],
+    correct: 2,
+    exp: "Airline deregulation is a textbook case: fares fell ~1/3, passenger numbers doubled, planes flew fuller, and service expanded to more cities. Some airlines went bankrupt (Pan Am, Eastern) while new competitors emerged. Safety continued to improve — FAA safety regulation was NOT removed, only pricing and route controls were deregulated.",
+  },
 ];
 
 // ─────────────────────────────────────────────
 // Draw all 40 questions in fixed authored order (no random draw — all 40 map to real exam)
 // ─────────────────────────────────────────────
 function drawQuestions(): Question[] {
-  return QUESTION_BANK; // all 40, in authored order
+  // Pool: 43 questions across Ch7-Ch13. Draw 30 balanced by type.
+  const byType: { [k: string]: Question[] } = { mc: [], multi: [], match: [], order: [] };
+  for (const q of QUESTION_BANK) byType[q.type].push(q);
+
+  const drawn: Question[] = [];
+  // All match questions (up to 7)
+  drawn.push(...shuffle(byType.match).slice(0, 7));
+  // All order questions (1)
+  drawn.push(...shuffle(byType.order).slice(0, 1));
+  // Multi-select (up to 10)
+  drawn.push(...shuffle(byType.multi).slice(0, 10));
+  // Fill remaining with MC to reach 30
+  const remaining = 30 - drawn.length;
+  drawn.push(...shuffle(byType.mc).slice(0, remaining));
+
+  return shuffle(drawn);
 }
 
 // ─────────────────────────────────────────────
 // Matching Question Component
 // ─────────────────────────────────────────────
-function MatchQuestion({ q, onAnswer }: { q: MatchQ; onAnswer: (correct: boolean) => void }) {
+function MatchQuestion({ q, onAnswer, isSubmitted }: { q: MatchQ; onAnswer: (correct: boolean) => void; isSubmitted: boolean }) {
   const [shuffledItems] = useState(() => {
     const idx = q.items.map((_, i) => i);
     const shuffled = shuffle(idx);
     return shuffled.map(i => ({ text: q.items[i], correctCat: q.correct[i] }));
   });
+  // Shuffle the categories displayed on the right independently
+  const [shuffledCats] = useState(() => shuffle(q.categories.map((c, i) => ({ text: c, origIdx: i }))));
   const [placed, setPlaced] = useState<(number | null)[]>(new Array(shuffledItems.length).fill(null));
   const [checked, setChecked] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<number | null>(null);
 
   const allPlaced = placed.every(p => p !== null);
   const score = shuffledItems.filter((item, i) => placed[i] === item.correctCat).length;
   const allCorrect = score === shuffledItems.length;
 
-  function place(itemIdx: number, catIdx: number) {
+  function selectItem(i: number) {
     if (checked) return;
-    setPlaced(prev => { const n = [...prev]; n[itemIdx] = catIdx; return n; });
+    setSelectedItem(prev => prev === i ? null : i);
+  }
+
+  function assignCat(catOrigIdx: number) {
+    if (checked || selectedItem === null) return;
+    setPlaced(prev => { const n = [...prev]; n[selectedItem] = catOrigIdx; return n; });
+    setSelectedItem(null);
+  }
+
+  function clearItem(i: number) {
+    if (checked) return;
+    setPlaced(prev => { const n = [...prev]; n[i] = null; return n; });
+    setSelectedItem(i);
   }
 
   return (
     <div className="space-y-3">
       <p className="text-sm text-muted-foreground italic">{q.instruction}</p>
-      <div className="space-y-2">
-        {shuffledItems.map((item, i) => {
-          const cat = placed[i];
-          const isCorrect = checked && cat === item.correctCat;
-          const isWrong = checked && cat !== null && cat !== item.correctCat;
-          return (
-            <div key={i} className={`rounded-xl border-2 p-3 transition-all ${checked ? (isCorrect ? "border-green-400 bg-green-50" : isWrong ? "border-red-400 bg-red-50" : "border-border bg-card") : "border-border bg-card"}`}>
-              <p className="text-sm font-medium text-foreground mb-2">
+      {!checked && selectedItem !== null && (
+        <p className="text-xs font-semibold text-primary">Now click a definition on the right to match it →</p>
+      )}
+      {!checked && selectedItem === null && !allPlaced && (
+        <p className="text-xs text-muted-foreground">Click a concept on the left to select it, then click its matching definition on the right.</p>
+      )}
+      <div className="grid grid-cols-2 gap-3">
+        {/* Left column — concepts */}
+        <div className="space-y-2">
+          <p className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Concept</p>
+          {shuffledItems.map((item, i) => {
+            const catIdx = placed[i];
+            const isCorrect = checked && catIdx === item.correctCat;
+            const isWrong = checked && catIdx !== null && catIdx !== item.correctCat;
+            const isSelected = selectedItem === i;
+            let cls = "w-full text-left rounded-xl border-2 p-2.5 text-xs font-semibold transition cursor-pointer ";
+            if (checked) cls += isCorrect ? "border-green-400 bg-green-50 text-green-800" : isWrong ? "border-red-400 bg-red-50 text-red-700" : "border-border bg-card text-muted-foreground";
+            else if (isSelected) cls += "border-primary bg-primary/10 text-primary";
+            else if (catIdx !== null) cls += "border-green-300 bg-green-50/50 text-foreground";
+            else cls += "border-border bg-card text-foreground hover:border-primary/40";
+            return (
+              <button key={i} onClick={() => catIdx !== null && !checked ? clearItem(i) : selectItem(i)} className={cls}>
                 {checked && (isCorrect ? "✓ " : isWrong ? "✗ " : "")}{item.text}
-                {isWrong && <span className="text-xs text-red-600 ml-2">→ {q.categories[item.correctCat]}</span>}
-              </p>
-              {!checked && (
-                <div className="flex gap-2 flex-wrap">
-                  {q.categories.map((cat, ci) => (
-                    <button key={ci} onClick={() => place(i, ci)}
-                      className={`px-3 py-1 rounded-full text-xs font-semibold border transition ${placed[i] === ci ? "border-primary bg-primary/10 text-foreground" : "border-border text-muted-foreground hover:border-primary/40"}`}>
-                      {cat.length > 40 ? cat.substring(0, 38) + "…" : cat}
-                    </button>
-                  ))}
-                </div>
-              )}
-              {checked && cat !== null && (
-                <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${isCorrect ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
-                  {q.categories[cat].length > 40 ? q.categories[cat].substring(0, 38) + "…" : q.categories[cat]}
-                </span>
-              )}
-            </div>
-          );
-        })}
+                {catIdx !== null && !checked && <span className="block text-xs text-muted-foreground mt-1 font-normal">→ {q.categories[catIdx]}</span>}
+                {isWrong && checked && <span className="block text-xs text-red-500 mt-1 font-normal">Should be: {q.categories[item.correctCat]}</span>}
+              </button>
+            );
+          })}
+        </div>
+        {/* Right column — definitions */}
+        <div className="space-y-2">
+          <p className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Definition</p>
+          {shuffledCats.map((cat, ci) => {
+            const isUsed = placed.includes(cat.origIdx);
+            const isSelected = selectedItem !== null;
+            let cls = "w-full text-left rounded-xl border-2 p-2.5 text-xs transition ";
+            if (checked) cls += "border-border bg-muted text-muted-foreground cursor-default";
+            else if (isUsed) cls += "border-green-200 bg-green-50/30 text-muted-foreground cursor-pointer hover:border-primary/40";
+            else if (isSelected) cls += "border-primary/40 bg-card text-foreground cursor-pointer hover:border-primary hover:bg-primary/5";
+            else cls += "border-border bg-card text-foreground cursor-default";
+            return (
+              <button key={ci} onClick={() => !isUsed && isSelected ? assignCat(cat.origIdx) : undefined} className={cls} disabled={checked}>
+                {cat.text}
+                {isUsed && !checked && <span className="block text-xs text-green-600 mt-0.5 font-semibold">✓ matched</span>}
+              </button>
+            );
+          })}
+        </div>
       </div>
       {checked && (
         <div className={`p-3 rounded-xl text-sm ${allCorrect ? "bg-green-50 border border-green-200 text-green-800" : "bg-amber-50 border border-amber-200 text-amber-800"}`}>
@@ -628,7 +730,7 @@ function MatchQuestion({ q, onAnswer }: { q: MatchQ; onAnswer: (correct: boolean
         </div>
       )}
       {!checked && (
-        <button onClick={() => { setChecked(true); onAnswer(allCorrect); }} disabled={!allPlaced}
+        <button onClick={() => { setChecked(true); onAnswer(allCorrect); }} disabled={!allPlaced || isSubmitted}
           className="w-full py-3 bg-primary hover:opacity-90 disabled:opacity-40 text-primary-foreground rounded-xl font-semibold transition">
           Check Answers
         </button>
@@ -640,7 +742,7 @@ function MatchQuestion({ q, onAnswer }: { q: MatchQ; onAnswer: (correct: boolean
 // ─────────────────────────────────────────────
 // Ordering Question Component
 // ─────────────────────────────────────────────
-function OrderQuestion({ q, onAnswer }: { q: OrderQ; onAnswer: (correct: boolean) => void }) {
+function OrderQuestion({ q, onAnswer, isSubmitted }: { q: OrderQ; onAnswer: (correct: boolean) => void; isSubmitted: boolean }) {
   const [shuffledSteps] = useState(() => {
     const idx = q.steps.map((_, i) => i);
     return shuffle(idx);
@@ -752,7 +854,7 @@ function ChoiceQuestion({ q, onAnswer }: { q: MCQ | MultiQ; onAnswer: (correct: 
           else if (isCorrect) cls += "border-green-500 bg-green-50 text-green-800";
           else if (isSel) cls += "border-red-400 bg-red-50 text-red-700";
           else cls += "border-border bg-card text-muted-foreground";
-          return <button key={i} className={cls} onClick={() => toggle(i)} disabled={submitted}>{isMulti ? (isSel ? "☑ " : "☐ ") : ""}{opt}</button>;
+          return <button key={i} className={cls} onClick={() => toggle(i)} disabled={submitted}><span className="whitespace-normal break-words text-left block">{isMulti ? (isSel ? "☑ " : "☐ ") : ""}{String.fromCharCode(65+i)}. {opt}</span></button>;
         })}
       </div>
       {submitted && (
@@ -879,22 +981,29 @@ function PracticeExam() {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [results, setResults] = useState<{ qNum: number; topic: string; correct: boolean }[]>([]);
   const [done, setDone] = useState(false);
+  const [checked, setChecked] = useState(false);
 
   function handleAnswer(correct: boolean) {
     const q = questions[currentIdx];
     const newResults = [...results, { qNum: q.id, topic: q.topic, correct }];
     setResults(newResults);
+    setChecked(true);
+  }
+
+  function handleNext() {
+    setChecked(false);
     if (currentIdx + 1 < questions.length) {
-      setTimeout(() => setCurrentIdx(i => i + 1), 800);
+      setCurrentIdx(i => i + 1);
     } else {
-      setTimeout(() => setDone(true), 800);
+      setDone(true);
     }
   }
 
-  if (done) return <ResultsScreen results={results} onRestart={() => { setResults([]); setCurrentIdx(0); setDone(false); }} />;
+  if (done) return <ResultsScreen results={results} onRestart={() => { setResults([]); setCurrentIdx(0); setDone(false); setChecked(false); }} />;
 
   const q = questions[currentIdx];
   const progress = Math.round(((currentIdx) / questions.length) * 100);
+  const isLast = currentIdx + 1 >= questions.length;
 
   return (
     <div className="min-h-screen bg-background">
@@ -927,10 +1036,18 @@ function PracticeExam() {
         </div>
 
         <div className="bg-card rounded-2xl border border-border p-5 shadow-sm">
-          {q.type === "match"  && <MatchQuestion  q={q as MatchQ}  onAnswer={handleAnswer} />}
-          {q.type === "order"  && <OrderQuestion  q={q as OrderQ}  onAnswer={handleAnswer} />}
-          {(q.type === "mc" || q.type === "multi") && <ChoiceQuestion q={q as MCQ | MultiQ} onAnswer={handleAnswer} />}
+          {q.type === "match"  && <MatchQuestion  key={q.id} q={q as MatchQ}  onAnswer={handleAnswer} isSubmitted={checked} />}
+          {q.type === "order"  && <OrderQuestion  key={q.id} q={q as OrderQ}  onAnswer={handleAnswer} isSubmitted={checked} />}
+          {(q.type === "mc" || q.type === "multi") && <ChoiceQuestion key={q.id} q={q as MCQ | MultiQ} onAnswer={handleAnswer} checked={checked} />}
         </div>
+        {checked && (
+          <div className="mt-4">
+            <button type="button" onClick={handleNext}
+              className="w-full py-3 rounded-xl bg-primary hover:opacity-90 text-primary-foreground font-semibold text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">
+              {isLast ? "Submit Exam →" : "Next Question →"}
+            </button>
+          </div>
+        )}
 
         {/* Progress dots */}
         <div className="flex gap-1 mt-4 justify-center flex-wrap">
@@ -973,7 +1090,7 @@ export default function EconLab() {
           className="w-full py-4 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-bold text-lg transition">
           Begin Practice Exam →
         </button>
-        <p className="text-xs text-muted-foreground">Access for free at <a href="https://openstax.org/books/principles-microeconomics-3e/pages/1-introduction" target="_blank" rel="noopener noreferrer" className="underline">OpenStax Microeconomics 3e</a></p>
+
       </div>
     </div>
   );
