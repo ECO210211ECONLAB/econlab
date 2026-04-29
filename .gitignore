@@ -2,3 +2,18 @@ node_modules/
 dist/
 .env
 *.log
+
+# Proprietary content — lecture slides, exams, personal docs
+*.pptx
+ECO-*-Final-Exam.pdf
+ECO-*-Midterm-Exam.pdf
+*-Final-Exam-Revised.docx
+*-Midterm-Exam-Revised.docx
+lecture-slides/
+
+# Build artifacts
+build_*.js
+*.pdf
+midterm-preview-*.jpg
+preview-*.jpg
+design-preview-*.jpg
