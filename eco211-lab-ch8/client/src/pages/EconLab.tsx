@@ -1350,10 +1350,6 @@ function Header({ station, onStation, completed }: { station: Station; onStation
             <div className="text-xs text-sidebar-foreground/80 leading-none mt-0.5">Chapter 8</div>
           </div>
         </div>
-        <a href="https://www.perplexity.ai/computer/a/eco-211-econlab-course-hub-h76o7OX6SpisjlWADnIRGg" target="_blank" rel="noopener noreferrer"
-          className="hidden sm:flex items-center gap-1.5 text-xs text-sidebar-foreground/80 hover:text-white transition-colors px-2 py-1 rounded-lg hover:bg-sidebar-accent shrink-0">
-          ← Course Hub <span className="sr-only">(opens in new tab)</span>
-        </a>
         <div className="hidden sm:flex items-center gap-1 flex-wrap">
           {stations.map((s) => {
             const idx = stationOrder.indexOf(s.id as Station);
@@ -1372,7 +1368,7 @@ function Header({ station, onStation, completed }: { station: Station; onStation
         </div>
         <div className="hidden md:block w-24">
           <div className="h-1.5 bg-sidebar-accent rounded-full overflow-hidden">
-            <div className="h-full bg-primary rounded-full transition-all duration-500" style={{ width: `${(currentIdx / (stations.length - 1)) * 100}%` }} />
+            <div className="h-full bg-primary rounded-full transition-all duration-500" role="progressbar" aria-valuenow={currentIdx} aria-valuemin={0} aria-valuemax={stations.length - 1} style={{ width: `${(currentIdx / (stations.length - 1)) * 100}%` }} />
           </div>
         </div>
       </div>
