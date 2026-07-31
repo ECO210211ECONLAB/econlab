@@ -4,7 +4,7 @@ import { ChevronLeft, Award, RotateCcw } from "lucide-react";
 // ─────────────────────────────────────────────
 // Types
 // ─────────────────────────────────────────────
-type Station = "intro" | "costs" | "profit" | "mp" | "curves" | "scale" | "markets" | "quiz" | "results" | "not-yet";
+type Station = "intro" | "costs" | "profit" | "mp" | "curves" | "scale" | "markets" | "flash" | "quiz" | "results" | "not-yet";
 
 // ─────────────────────────────────────────────
 // Utilities
@@ -908,6 +908,67 @@ const QUIZ_QS: QA[] = [
   { q: "A natural monopoly arises when: (Select all that apply)", opts: ["A single firm has a government-granted patent", "Economies of scale persist across the entire level of market demand", "One firm's LRAC is still declining at the output level that meets total market demand", "The product is essential and has no close substitutes"], correct: [1, 2], multi: true, exp: "A natural monopoly occurs specifically when the LRAC is still falling across the entire market demand — one firm can supply the whole market cheaper than two firms splitting it. This is distinct from legal monopolies (patents) or monopolies based on essential goods." },
 ];
 
+const FLASHCARDS = [
+  { front: "Explicit Cost", back: "A direct monetary payment made to hire or use a resource. Example: wages paid to workers, rent on a building, cost of materials. What accountants count." },
+  { front: "Implicit Cost", back: "The opportunity cost of resources the firm already owns — what those resources could earn in their next-best use. Example: the salary a business owner gives up to run their own firm." },
+  { front: "Accounting Profit", back: "Total Revenue minus Explicit Costs only. What the IRS and accountants calculate. Accounting Profit = TR − Explicit Costs." },
+  { front: "Economic Profit", back: "Total Revenue minus ALL costs — both explicit AND implicit. Economic Profit = TR − Explicit Costs − Implicit Costs. Zero economic profit = normal profit." },
+  { front: "Law of Diminishing Marginal Returns", back: "As additional units of a variable input (e.g. labor) are added to a fixed input, the marginal product of each additional unit eventually falls. Applies in the short run only." },
+  { front: "Marginal Cost (MC)", back: "The additional cost of producing one more unit of output. MC = ΔTC / ΔQ. The most important cost concept — drives the profit-maximizing decision." },
+  { front: "Average Total Cost (ATC)", back: "Total cost divided by output. ATC = TC / Q = AFC + AVC. U-shaped due to fixed costs spreading then diminishing returns." },
+  { front: "Economies of Scale", back: "Long-run average cost falls as output increases. Larger scale = lower per-unit cost. Sources: specialization, bulk purchasing, spreading fixed costs." },
+  { front: "Diseconomies of Scale", back: "Long-run average cost rises as output increases. Too large = coordination problems, management inefficiency. LRAC curve rises at very high output." },
+  { front: "Fixed Cost", back: "A cost that does not change with output in the short run — paid whether the firm produces 0 or 1,000 units. Example: rent, insurance, equipment leases." },
+  { front: "Variable Cost", back: "A cost that changes with output. Rises as production rises, falls as production falls. Example: labor, raw materials, utilities tied to production." },
+  { front: "Market Structure", back: "The characteristics of a market that determine the degree of competition: number of sellers, product differentiation, ease of entry/exit, and pricing power." },
+];
+
+function FlashcardStation({ onComplete }: { onComplete: (score: number, total: number) => void }) {
+  const [cards] = useState(() => shuffle([...FLASHCARDS]));
+  const [idx, setIdx] = useState(0);
+  const [flipped, setFlipped] = useState(false);
+  const [seen, setSeen] = useState<Set<number>>(new Set());
+
+  function handleFlip() { setFlipped(f => !f); }
+  function handleNext() {
+    setSeen(s => new Set([...s, idx]));
+    if (idx < cards.length - 1) { setIdx(i => i + 1); setFlipped(false); }
+  }
+  function handlePrev() {
+    if (idx > 0) { setIdx(i => i - 1); setFlipped(false); }
+  }
+  const allSeen = seen.size >= cards.length - 1;
+
+  return (
+    <div className="max-w-lg mx-auto space-y-4">
+      <div className="bg-primary/10 border border-primary/20 rounded-xl p-4 text-sm">
+        <p className="font-semibold text-foreground mb-1">Flashcard Review — Chapter 7 Key Terms</p>
+        <p className="text-muted-foreground text-xs">Review all {cards.length} terms. Click each card to reveal the definition. You must view all cards before the Quiz unlocks.</p>
+        <div className="mt-2 h-1.5 bg-primary/20 rounded-full overflow-hidden">
+          <div className="h-full bg-primary rounded-full transition-all" role="progressbar" aria-valuenow={seen.size} aria-valuemin={0} aria-valuemax={cards.length} style={{ width: `${(seen.size / cards.length) * 100}%` }} />
+        </div>
+        <p className="text-xs text-muted-foreground mt-1">{seen.size}/{cards.length} cards reviewed</p>
+      </div>
+      <div onClick={handleFlip} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleFlip(); }}} role="button" tabIndex={0} aria-label={flipped ? "Card showing definition. Press to see term." : "Card showing term. Press to reveal definition."} className="cursor-pointer select-none bg-card border-2 border-border rounded-2xl p-6 min-h-[160px] flex flex-col items-center justify-center text-center shadow-sm hover:border-primary transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+        <span aria-live="polite" aria-atomic="true" className="sr-only">{flipped ? cards[idx].back : cards[idx].front}</span>
+        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">{flipped ? "Definition" : "Term"} — {idx + 1} / {cards.length}</p>
+        <p className={`font-semibold leading-relaxed ${flipped ? "text-sm text-muted-foreground" : "text-base text-foreground"}`}>
+          {flipped ? cards[idx].back : cards[idx].front}
+        </p>
+        <p className="text-xs text-muted-foreground mt-4">{flipped ? "Click to see term" : "Click to reveal definition"}</p>
+      </div>
+      <div className="flex gap-2">
+        <button onClick={handlePrev} disabled={idx === 0} className="flex-1 py-2 rounded-xl border border-border text-sm font-medium text-foreground disabled:opacity-30 hover:bg-muted transition">← Prev</button>
+        <button onClick={handleNext} disabled={idx === cards.length - 1} className="flex-1 py-2 rounded-xl border border-border text-sm font-medium text-foreground disabled:opacity-30 hover:bg-muted transition">Next →</button>
+      </div>
+      <button disabled={!allSeen} onClick={() => onComplete(cards.length, cards.length)}
+        className="w-full py-3 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:opacity-90 transition disabled:opacity-40">
+        {allSeen ? "Mark Complete — Unlock Quiz ✓" : `Review all cards to unlock (${seen.size}/${cards.length})`}
+      </button>
+    </div>
+  );
+}
+
 function QuizStation({ onPass, onFail }: { onPass: (score: number, results: { correct: boolean; exp: string }[]) => void; onFail: (score: number, results: { correct: boolean; exp: string }[]) => void }) {
   const [questions] = useState(() => shuffle(QUIZ_QS).map(q => {
     const s = shuffleOpts(q.opts, q.correct);
@@ -1204,7 +1265,7 @@ function Header({ station, onStation, completed }: { station: Station; onStation
   ];
   const CONTENT_STATIONS: Station[] = ["costs","profit","mp","curves","scale","markets"];
   const allDone = CONTENT_STATIONS.every(s => completed.has(s as Station));
-  const stationOrder: Station[] = ["intro","costs","profit","mp","curves","scale","markets","quiz","results","not-yet"];
+  const stationOrder: Station[] = ["intro","costs","profit","mp","curves","scale","markets","flash","flash","quiz","results","not-yet"];
   const currentIdx = stationOrder.indexOf(station);
 
   return (
@@ -1321,6 +1382,7 @@ export default function EconLab() {
         {station === "curves"  && <CurvesStation onComplete={() => markComplete("curves")} />}
         {station === "scale"   && <ScaleStation onComplete={() => markComplete("scale")} />}
         {station === "markets" && <MarketsStation onComplete={() => markComplete("markets")} />}
+        {station === "flash" && <FlashcardStation onComplete={(sc, t) => { markDone("flash"); }} />}
         {station === "quiz" && (
           <div className="space-y-4">
             <button onClick={() => go("intro")} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">

@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { ChevronLeft, Award, RotateCcw } from "lucide-react";
 
-type Station = "intro" | "recap" | "innovation" | "govpolicy" | "goodstypes" | "freerider" | "quiz" | "results" | "not-yet";
+type Station = "intro" | "recap" | "innovation" | "govpolicy" | "goodstypes" | "freerider" | "flash" | "quiz" | "results" | "not-yet";
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -598,6 +598,67 @@ const QUIZ_BANK = [
   { q: "Which of the following correctly distinguish club goods from public goods? (Select all that apply)", opts: ["Club goods are excludable; public goods are not", "Both club goods and public goods are non-rival", "Club goods are rival; public goods are non-rival", "Public goods are excludable; club goods are not"], correct: [0, 1], multi: true, exp: "Club good = excludable + non-rival. Public good = non-excludable + non-rival. The key difference is excludability — club goods can charge members; public goods cannot. Both are non-rival (use by one doesn't reduce availability for others)." },
 ];
 
+const FLASHCARDS = [
+  { front: "Positive Externality", back: "A spillover benefit enjoyed by third parties not involved in a transaction. Markets underproduce goods with positive externalities — private benefit < social benefit. Examples: education, vaccination, R&D." },
+  { front: "Public Good", back: "Non-excludable (can't prevent non-payers from benefiting) AND non-rival (one person's use doesn't reduce availability to others). Examples: national defense, public fireworks, basic scientific knowledge." },
+  { front: "Private Good", back: "Excludable (non-payers can be prevented) AND rival (one person's use reduces availability to others). Examples: a sandwich, a concert ticket, a haircut. Markets provide these efficiently." },
+  { front: "Common Good (Common-Pool Resource)", back: "Non-excludable BUT rival — anyone can access it, but one person's use reduces availability to others. Subject to the Tragedy of the Commons. Examples: fisheries, groundwater, public pastures." },
+  { front: "Club Good", back: "Excludable BUT non-rival up to a congestion point. Non-payers can be excluded, but use doesn't reduce availability until crowded. Examples: toll roads (uncongested), streaming services, private parks." },
+  { front: "Free Rider Problem", back: "When individuals consume a public good without contributing to its cost, because exclusion is impossible. Results in market underprovision — the reason government provides public goods like defense and public health." },
+  { front: "Tragedy of the Commons", back: "The tendency to overuse and deplete a common-pool resource because each user's individual incentive ignores the cost imposed on others. Solutions: privatization, government regulation, or community management." },
+  { front: "Patent", back: "A government-granted exclusive right to produce and sell an invention for a set period (20 years in the U.S.). Rewards innovation by allowing temporary monopoly profits — creates incentive to invest in R&D." },
+  { front: "Knowledge as a Public Good", back: "Knowledge is non-rival (one person using an idea doesn't prevent others) and often non-excludable. Markets underinvest in basic research — justifying government funding of universities and public science." },
+  { front: "Government Provision", back: "Direct government supply of goods with large positive externalities or public good characteristics — national defense, public education, public health infrastructure. Funded by taxes." },
+  { front: "Subsidy (Positive Externality)", back: "A payment by government to encourage production or consumption of goods with positive externalities. Closes the gap between private benefit and social benefit. Examples: R&D tax credits, education subsidies." },
+  { front: "Information Asymmetry", back: "When one party in a transaction has more or better information than the other. Can cause market failure. Examples: used car market (seller knows more), health insurance (buyer knows more about health)." },
+];
+
+function FlashcardStation({ onComplete }: { onComplete: (score: number, total: number) => void }) {
+  const [cards] = useState(() => shuffle([...FLASHCARDS]));
+  const [idx, setIdx] = useState(0);
+  const [flipped, setFlipped] = useState(false);
+  const [seen, setSeen] = useState<Set<number>>(new Set());
+
+  function handleFlip() { setFlipped(f => !f); }
+  function handleNext() {
+    setSeen(s => new Set([...s, idx]));
+    if (idx < cards.length - 1) { setIdx(i => i + 1); setFlipped(false); }
+  }
+  function handlePrev() {
+    if (idx > 0) { setIdx(i => i - 1); setFlipped(false); }
+  }
+  const allSeen = seen.size >= cards.length - 1;
+
+  return (
+    <div className="max-w-lg mx-auto space-y-4">
+      <div className="bg-primary/10 border border-primary/20 rounded-xl p-4 text-sm">
+        <p className="font-semibold text-foreground mb-1">Flashcard Review — Chapter 13 Key Terms</p>
+        <p className="text-muted-foreground text-xs">Review all {cards.length} terms. Click each card to reveal the definition. You must view all cards before the Quiz unlocks.</p>
+        <div className="mt-2 h-1.5 bg-primary/20 rounded-full overflow-hidden">
+          <div className="h-full bg-primary rounded-full transition-all" role="progressbar" aria-valuenow={seen.size} aria-valuemin={0} aria-valuemax={cards.length} style={{ width: `${(seen.size / cards.length) * 100}%` }} />
+        </div>
+        <p className="text-xs text-muted-foreground mt-1">{seen.size}/{cards.length} cards reviewed</p>
+      </div>
+      <div onClick={handleFlip} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleFlip(); }}} role="button" tabIndex={0} aria-label={flipped ? "Card showing definition. Press to see term." : "Card showing term. Press to reveal definition."} className="cursor-pointer select-none bg-card border-2 border-border rounded-2xl p-6 min-h-[160px] flex flex-col items-center justify-center text-center shadow-sm hover:border-primary transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+        <span aria-live="polite" aria-atomic="true" className="sr-only">{flipped ? cards[idx].back : cards[idx].front}</span>
+        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">{flipped ? "Definition" : "Term"} — {idx + 1} / {cards.length}</p>
+        <p className={`font-semibold leading-relaxed ${flipped ? "text-sm text-muted-foreground" : "text-base text-foreground"}`}>
+          {flipped ? cards[idx].back : cards[idx].front}
+        </p>
+        <p className="text-xs text-muted-foreground mt-4">{flipped ? "Click to see term" : "Click to reveal definition"}</p>
+      </div>
+      <div className="flex gap-2">
+        <button onClick={handlePrev} disabled={idx === 0} className="flex-1 py-2 rounded-xl border border-border text-sm font-medium text-foreground disabled:opacity-30 hover:bg-muted transition">← Prev</button>
+        <button onClick={handleNext} disabled={idx === cards.length - 1} className="flex-1 py-2 rounded-xl border border-border text-sm font-medium text-foreground disabled:opacity-30 hover:bg-muted transition">Next →</button>
+      </div>
+      <button disabled={!allSeen} onClick={() => onComplete(cards.length, cards.length)}
+        className="w-full py-3 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:opacity-90 transition disabled:opacity-40">
+        {allSeen ? "Mark Complete — Unlock Quiz ✓" : `Review all cards to unlock (${seen.size}/${cards.length})`}
+      </button>
+    </div>
+  );
+}
+
 function QuizStation({ onPass, onFail }: { onPass: (score: number, results: { correct: boolean; exp: string }[]) => void; onFail: (score: number, results: { correct: boolean; exp: string }[]) => void }) {
   const [questions] = useState(() => shuffle(QUIZ_BANK).map(q => {
     const s = shuffleOpts(q.opts, q.correct);
@@ -875,7 +936,7 @@ function Header({ station, onStation, completed }: { station: Station; onStation
   ];
   const CONTENT_STATIONS: Station[] = ["recap","innovation","govpolicy","goodstypes","freerider"];
   const allDone = CONTENT_STATIONS.every(s => completed.has(s as Station));
-  const stationOrder: Station[] = ["intro","recap","innovation","govpolicy","goodstypes","freerider","quiz","results","not-yet"];
+  const stationOrder: Station[] = ["intro","recap","innovation","govpolicy","goodstypes","freerider","flash","flash","quiz","results","not-yet"];
   const currentIdx = stationOrder.indexOf(station);
 
   return (
@@ -991,6 +1052,7 @@ export default function EconLab() {
           </div>
         )}
 
+        {station === "flash" && <FlashcardStation onComplete={(sc, t) => { markDone("flash"); }} />}
         {station === "quiz" && (
           <div className="space-y-4">
             <div className="flex items-center gap-3">

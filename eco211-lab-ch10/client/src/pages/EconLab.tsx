@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { ChevronLeft, Award, RotateCcw } from "lucide-react";
 
-type Station = "intro" | "recap" | "structures" | "moncomp" | "prisoner" | "oligopoly" | "quiz" | "results" | "not-yet";
+type Station = "intro" | "recap" | "structures" | "moncomp" | "prisoner" | "oligopoly" | "flash" | "quiz" | "results" | "not-yet";
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -712,6 +712,67 @@ const QUIZ_BANK = [
   { q: "Which of the following are features of an oligopoly? (Select all that apply)", opts: ["Few dominant firms", "High barriers to entry", "Firm decisions are interdependent", "Free and easy entry for all firms"], correct: [0, 1, 2], multi: true, exp: "Oligopoly = few dominant firms + high barriers to entry + strategic interdependence. Easy entry would undermine the concentrated market structure that defines oligopoly." },
 ];
 
+const FLASHCARDS = [
+  { front: "Monopolistic Competition", back: "A market structure with: (1) many sellers, (2) differentiated products, (3) easy entry and exit. Examples: restaurants, clothing, personal care services." },
+  { front: "Product Differentiation", back: "Making a product distinct from competitors' — by quality, style, location, service, or brand image. Gives the firm some pricing power (downward-sloping demand) despite competition." },
+  { front: "Long-Run Equilibrium (Monopolistic Competition)", back: "Economic profit = zero. Entry eliminates positive profits; exit eliminates losses. Long-run: P = ATC but P > MC — so allocatively inefficient. Excess capacity remains." },
+  { front: "Excess Capacity (Monopolistic Competition)", back: "In long-run equilibrium, monopolistically competitive firms produce less than the output at minimum ATC. Unused productive capacity — the 'cost' of variety and differentiation." },
+  { front: "Oligopoly", back: "A market structure with a small number of large firms, significant barriers to entry, and interdependence — each firm's decisions affect rivals. Examples: airlines, auto manufacturers, wireless carriers." },
+  { front: "Interdependence (Oligopoly)", back: "Each oligopolist's pricing and output decisions affect rivals and trigger responses. Firms must anticipate competitors' reactions — unlike perfect competition or monopoly." },
+  { front: "Prisoner's Dilemma", back: "A game theory scenario where individually rational choices lead to a collectively worse outcome. Explains why oligopolists find it difficult to maintain cartel agreements — each firm has an incentive to cheat." },
+  { front: "Cartel", back: "An explicit agreement among firms to coordinate prices and output — effectively acting as a monopoly. Illegal under U.S. antitrust law. Inherently unstable due to cheating incentives." },
+  { front: "Nash Equilibrium", back: "A situation where no player can improve their outcome by unilaterally changing their strategy, given what others are doing. The stable outcome of a game." },
+  { front: "Dominant Strategy", back: "A strategy that is the best choice for a player regardless of what rivals do. In the prisoner's dilemma, defecting (cheating) is a dominant strategy for both players." },
+  { front: "Herfindahl-Hirschman Index (HHI)", back: "A measure of market concentration: sum of squared market shares of all firms. HHI > 2,500 = highly concentrated. Used by the FTC to evaluate mergers." },
+  { front: "Collusion", back: "Secret or explicit coordination among competing firms to fix prices or divide markets. Explicit collusion is illegal. Tacit collusion (parallel pricing) is harder to prove." },
+];
+
+function FlashcardStation({ onComplete }: { onComplete: (score: number, total: number) => void }) {
+  const [cards] = useState(() => shuffle([...FLASHCARDS]));
+  const [idx, setIdx] = useState(0);
+  const [flipped, setFlipped] = useState(false);
+  const [seen, setSeen] = useState<Set<number>>(new Set());
+
+  function handleFlip() { setFlipped(f => !f); }
+  function handleNext() {
+    setSeen(s => new Set([...s, idx]));
+    if (idx < cards.length - 1) { setIdx(i => i + 1); setFlipped(false); }
+  }
+  function handlePrev() {
+    if (idx > 0) { setIdx(i => i - 1); setFlipped(false); }
+  }
+  const allSeen = seen.size >= cards.length - 1;
+
+  return (
+    <div className="max-w-lg mx-auto space-y-4">
+      <div className="bg-primary/10 border border-primary/20 rounded-xl p-4 text-sm">
+        <p className="font-semibold text-foreground mb-1">Flashcard Review — Chapter 10 Key Terms</p>
+        <p className="text-muted-foreground text-xs">Review all {cards.length} terms. Click each card to reveal the definition. You must view all cards before the Quiz unlocks.</p>
+        <div className="mt-2 h-1.5 bg-primary/20 rounded-full overflow-hidden">
+          <div className="h-full bg-primary rounded-full transition-all" role="progressbar" aria-valuenow={seen.size} aria-valuemin={0} aria-valuemax={cards.length} style={{ width: `${(seen.size / cards.length) * 100}%` }} />
+        </div>
+        <p className="text-xs text-muted-foreground mt-1">{seen.size}/{cards.length} cards reviewed</p>
+      </div>
+      <div onClick={handleFlip} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleFlip(); }}} role="button" tabIndex={0} aria-label={flipped ? "Card showing definition. Press to see term." : "Card showing term. Press to reveal definition."} className="cursor-pointer select-none bg-card border-2 border-border rounded-2xl p-6 min-h-[160px] flex flex-col items-center justify-center text-center shadow-sm hover:border-primary transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+        <span aria-live="polite" aria-atomic="true" className="sr-only">{flipped ? cards[idx].back : cards[idx].front}</span>
+        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">{flipped ? "Definition" : "Term"} — {idx + 1} / {cards.length}</p>
+        <p className={`font-semibold leading-relaxed ${flipped ? "text-sm text-muted-foreground" : "text-base text-foreground"}`}>
+          {flipped ? cards[idx].back : cards[idx].front}
+        </p>
+        <p className="text-xs text-muted-foreground mt-4">{flipped ? "Click to see term" : "Click to reveal definition"}</p>
+      </div>
+      <div className="flex gap-2">
+        <button onClick={handlePrev} disabled={idx === 0} className="flex-1 py-2 rounded-xl border border-border text-sm font-medium text-foreground disabled:opacity-30 hover:bg-muted transition">← Prev</button>
+        <button onClick={handleNext} disabled={idx === cards.length - 1} className="flex-1 py-2 rounded-xl border border-border text-sm font-medium text-foreground disabled:opacity-30 hover:bg-muted transition">Next →</button>
+      </div>
+      <button disabled={!allSeen} onClick={() => onComplete(cards.length, cards.length)}
+        className="w-full py-3 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:opacity-90 transition disabled:opacity-40">
+        {allSeen ? "Mark Complete — Unlock Quiz ✓" : `Review all cards to unlock (${seen.size}/${cards.length})`}
+      </button>
+    </div>
+  );
+}
+
 function QuizStation({ onPass, onFail }: { onPass: (score: number, results: { correct: boolean; exp: string }[]) => void; onFail: (score: number, results: { correct: boolean; exp: string }[]) => void }) {
   const [questions] = useState(() => shuffle(QUIZ_BANK).map(q => {
     const s = shuffleOpts(q.opts, q.correct);
@@ -989,7 +1050,7 @@ function Header({ station, onStation, completed }: { station: Station; onStation
   ];
   const CONTENT_STATIONS: Station[] = ["recap","structures","moncomp","prisoner","oligopoly"];
   const allDone = CONTENT_STATIONS.every(s => completed.has(s as Station));
-  const stationOrder: Station[] = ["intro","recap","structures","moncomp","prisoner","oligopoly","quiz","results","not-yet"];
+  const stationOrder: Station[] = ["intro","recap","structures","moncomp","prisoner","oligopoly","flash","flash","quiz","results","not-yet"];
   const currentIdx = stationOrder.indexOf(station);
 
   return (
@@ -1105,6 +1166,7 @@ export default function EconLab() {
           </div>
         )}
 
+        {station === "flash" && <FlashcardStation onComplete={(sc, t) => { markDone("flash"); }} />}
         {station === "quiz" && (
           <div className="space-y-4">
             <div className="flex items-center gap-3">

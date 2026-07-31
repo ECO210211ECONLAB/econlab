@@ -1383,269 +1383,63 @@ interface Flashcard {
   hint?: string;
 }
 
-const CH2_CARDS: Flashcard[] = [
-  // ── Basic flip cards ──────────────────────────────────────
-  {
-    id: 1, type: "basic",
-    front: "What is opportunity cost?",
-    back: "The value of the next-best alternative you give up when making a choice.\n\nKey: It includes BOTH direct costs AND foregone alternatives.",
-  },
-  {
-    id: 2, type: "basic",
-    front: "What is a sunk cost — and how should it affect your decisions?",
-    back: "A sunk cost is a past cost that cannot be recovered.\n\nRule: Ignore it. Make decisions based on future costs and benefits only.",
-  },
-  {
-    id: 3, type: "basic",
-    front: "What is the marginal analysis decision rule?",
-    back: "Do one more unit only if Marginal Benefit ≥ Marginal Cost.\n\nStop when MC > MB.",
-  },
-  {
-    id: 4, type: "basic",
-    front: "What does a point ON the PPF represent?",
-    back: "Productive efficiency — the economy is using all resources fully. You cannot produce more of one good without producing less of the other.",
-  },
-  {
-    id: 5, type: "basic",
-    front: "What is the difference between productive efficiency and allocative efficiency?",
-    back: "Productive efficiency = producing ON the PPF (no wasted resources).\n\nAllocative efficiency = producing the RIGHT combination on the PPF — the mix society most wants.",
-  },
-  {
-    id: 6, type: "basic",
-    front: "What is the Law of Diminishing Marginal Utility?",
-    back: "Each additional unit of a good consumed provides less additional satisfaction than the previous unit.\n\nExample: The 1st pizza slice > the 6th pizza slice.",
-  },
-  // ── Cloze cards ──────────────────────────────────────────
-  {
-    id: 7, type: "cloze",
-    front: "Complete: The true opportunity cost of attending college = _______ + _______.",
-    back: "Tuition (direct cost) + Foregone wages from not working (indirect cost).\n\nBoth are real sacrifices — economists count both. For many students, the foregone earnings are the larger cost.",
-    hint: "Think: what do you pay AND what do you give up? (Often the forgone earnings exceed tuition.)",
-  },
-  {
-    id: 8, type: "cloze",
-    front: "Complete: The PPF curves outward (is concave) due to the Law of _______ Opportunity Cost.",
-    back: "Increasing Opportunity Cost.\n\nAs you shift more resources to one good, those resources become increasingly less suited to that production — each extra unit costs more and more.",
-    hint: "Think: teachers well-suited to medicine shift first (big gain, small loss); best teachers shift last (small gain, huge loss).",
-  },
-  {
-    id: 9, type: "cloze",
-    front: "Alphonso has $10/week. Burgers cost $2, bus tickets $0.50. The opportunity cost of 1 burger = _______ bus tickets.",
-    back: "4 bus tickets.\n\n$2 ÷ $0.50 = 4. For every burger Alphonso buys, he gives up 4 bus rides.",
-    hint: "Divide the price of a burger by the price of a bus ticket.",
-  },
-  {
-    id: 10, type: "cloze",
-    front: "Complete: A country has _______ advantage in a good when it can produce it at a lower _______ cost than another country.",
-    back: "Comparative advantage / opportunity cost.\n\nKey: It's about opportunity cost — NOT about who is more productive overall.",
-    hint: "Comparative _____ / opportunity _____",
-  },
-  {
-    id: 11, type: "cloze",
-    front: "Complete: A point _______ the PPF is productively efficient. A point _______ the PPF represents wasted resources.",
-    back: "ON the PPF = productively efficient.\nINSIDE the PPF = inefficient (idle resources, waste, recession).\nOUTSIDE the PPF = currently unattainable.",
-    hint: "On / Inside / Outside — three zones.",
-  },
-  // ── Scenario / Diagram cards ──────────────────────────────
-  {
-    id: 12, type: "scenario",
-    front: "Selena paid $8 for a movie ticket. Thirty minutes in, the movie is terrible and she is miserable.\n\nShould the $8 factor into her decision to stay or leave?",
-    back: "No. The $8 is a sunk cost — it is gone whether she stays or leaves.\n\nRational decision: compare only the future cost (90 more minutes of misery) vs. the future benefit of leaving (doing something enjoyable). The $8 is irrelevant.",
-    hint: "Sunk cost rule: focus on future, not the past.",
-  },
-  {
-    id: 13, type: "scenario",
-    front: "US: 1 hour to make wheat, 4 hours to make sugar.\nBrazil: 5 hours to make wheat, 2 hours to make sugar.\n\nWho has comparative advantage in sugar — and why?",
-    back: "Brazil has comparative advantage in sugar.\n\nBrazil's opportunity cost of sugar = 2/5 wheat. US opportunity cost of sugar = 4 wheat.\n\nBrazil gives up far less wheat to produce sugar → lower opportunity cost → comparative advantage.",
-    hint: "Calculate opportunity cost for each country, then compare.",
-  },
-  {
-    id: 14, type: "scenario",
-    front: "You are deciding whether to take one more work shift for $60. You value the free evening at $45.\n\nAccording to marginal analysis, what should you do?",
-    back: "Take the shift.\n\nMarginal Benefit ($60) > Marginal Cost ($45 value of free time).\n\nThe extra benefit of working exceeds the extra cost — do it.",
-    hint: "Compare MB vs MC.",
-  },
-  {
-    id: 15, type: "scenario",
-    front: "A society produces only Healthcare and Education. Currently all resources go to Education.\n\nAs it shifts some resources toward Healthcare, what happens to the opportunity cost of each additional unit of Healthcare?",
-    back: "The opportunity cost INCREASES.\n\nThe first resources shifted (teachers who can easily train as nurses) provide big healthcare gains for small education losses.\n\nBut the last resources shifted (specialized surgeons becoming teachers) provide small healthcare gains at huge education cost.\n\nThis is the Law of Increasing Opportunity Cost — why the PPF curves outward.",
-    hint: "Think about which resources get shifted first vs. last.",
-  },
+const FLASHCARDS = [
+  { front: "Opportunity Cost", back: "The value of the next-best alternative you give up when making a choice. Includes both direct costs AND foregone alternatives." },
+  { front: "Sunk Cost", back: "A past cost that has already been paid and cannot be recovered. Rule: ignore sunk costs when making decisions — they are irrelevant to future choices." },
+  { front: "Marginal Analysis", back: "Decision-making at the margin: do one more unit only if Marginal Benefit ≥ Marginal Cost. Stop when MB < MC. The foundation of economic decision-making." },
+  { front: "Production Possibilities Frontier (PPF)", back: "A curve showing the maximum combinations of two goods an economy can produce when all resources are fully and efficiently used. Points on the curve = productive efficiency." },
+  { front: "Productive Efficiency", back: "Producing ON the PPF — using all resources fully with no waste. You cannot produce more of one good without producing less of another." },
+  { front: "Allocative Efficiency", back: "Producing the RIGHT combination on the PPF — the mix that society most values. Productive efficiency is necessary but not sufficient for allocative efficiency." },
+  { front: "Law of Increasing Opportunity Cost", back: "As you produce more of one good, the opportunity cost of each additional unit rises. Causes the PPF to bow outward (concave shape) — resources are not perfectly adaptable." },
+  { front: "Comparative Advantage", back: "The ability to produce a good at a lower opportunity cost than another producer. The basis for trade — each party specializes in what they give up least to produce." },
+  { front: "Absolute Advantage", back: "The ability to produce more of a good than another producer using the same resources. Does NOT determine who should specialize — comparative advantage does." },
+  { front: "Law of Diminishing Marginal Utility", back: "Each additional unit of a good consumed provides less additional satisfaction than the previous unit. The 1st slice of pizza > the 6th slice." },
+  { front: "Budget Constraint", back: "The set of all combinations of goods a consumer can afford given their income and prices. Changes when income or prices change." },
+  { front: "Positive vs. Normative Economics", back: "Positive: what IS (testable, factual). Normative: what SHOULD BE (value judgment). Example: 'Tariffs raise prices' (positive) vs. 'Tariffs should be eliminated' (normative)." },
 ];
 
 function FlashcardStation({ onComplete }: { onComplete: (score: number, total: number) => void }) {
-  const [deck, setDeck] = useState<Flashcard[]>(() => {
-    // Start with all cards in order
-    return [...CH2_CARDS];
-  });
-  const [currentIdx, setCurrentIdx] = useState(0);
+  const [cards] = useState(() => shuffle([...FLASHCARDS]));
+  const [idx, setIdx] = useState(0);
   const [flipped, setFlipped] = useState(false);
-  const [mastered, setMastered] = useState<Set<number>>(new Set());
-  const [reviewAgain, setReviewAgain] = useState<Set<number>>(new Set());
-  const [done, setDone] = useState(false);
-  const [showHint, setShowHint] = useState(false);
+  const [seen, setSeen] = useState<Set<number>>(new Set());
 
-  const total = CH2_CARDS.length;
-  const masteredCount = mastered.size;
-  const current = deck[currentIdx];
-
-  function handleGotIt() {
-    const newMastered = new Set(mastered);
-    newMastered.add(current.id);
-    const newReview = new Set(reviewAgain);
-    newReview.delete(current.id);
-    setMastered(newMastered);
-    setReviewAgain(newReview);
-    advance(newMastered, deck);
+  function handleFlip() { setFlipped(f => !f); }
+  function handleNext() {
+    setSeen(s => new Set([...s, idx]));
+    if (idx < cards.length - 1) { setIdx(i => i + 1); setFlipped(false); }
   }
-
-  function handleReviewAgain() {
-    const newReview = new Set(reviewAgain);
-    newReview.add(current.id);
-    // Move this card to end of deck
-    const newDeck = deck.filter((_, i) => i !== currentIdx);
-    newDeck.push(current);
-    setDeck(newDeck);
-    setFlipped(false);
-    setShowHint(false);
-    // Stay at same index (next card is now here) or wrap
-    if (currentIdx >= newDeck.length) setCurrentIdx(0);
+  function handlePrev() {
+    if (idx > 0) { setIdx(i => i - 1); setFlipped(false); }
   }
-
-  function advance(newMastered: Set<number>, currentDeck: Flashcard[]) {
-    setFlipped(false);
-    setShowHint(false);
-    // Remove mastered cards from deck
-    const remaining = currentDeck.filter(c => !newMastered.has(c.id));
-    if (remaining.length === 0) {
-      setDone(true);
-      return;
-    }
-    setDeck(remaining);
-    setCurrentIdx(0);
-  }
-
-  const cardTypeLabel: Record<CardType, string> = {
-    basic: "Flip Card",
-    cloze: "Fill in the Blank",
-    scenario: "Apply It",
-  };
-  const cardTypeColor: Record<CardType, string> = {
-    basic: "bg-blue-50 border-blue-200 text-blue-700",
-    cloze: "bg-amber-50 border-amber-200 text-amber-700",
-    scenario: "bg-purple-50 border-purple-200 text-purple-700",
-  };
-
-  if (done) return (
-    <div className="max-w-lg mx-auto space-y-4">
-      <div className="bg-green-50 border border-green-200 rounded-2xl p-6 text-center">
-        <p className="text-3xl mb-2">🎴</p>
-        <p className="text-lg font-bold text-green-800">All {total} cards mastered!</p>
-        <p className="text-sm text-green-700 mt-1">
-          You cleared the full Ch2 deck. The quiz is now unlocked.
-        </p>
-      </div>
-      <button type="button" onClick={() => onComplete(masteredCount, total)}
-        className="w-full py-3 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">
-        Mark Complete ✓
-      </button>
-    </div>
-  );
+  const allSeen = seen.size >= cards.length - 1;
 
   return (
     <div className="max-w-lg mx-auto space-y-4">
-      {/* Concept banner */}
-      <div className="bg-primary/10 border border-primary/20 rounded-xl p-4">
-        <p className="font-semibold text-sm text-foreground mb-1">Flashcard Review — Chapter 2</p>
-        <p className="text-xs text-muted-foreground">
-          Read the front of each card, think of your answer, then flip. Rate yourself honestly.
-          Cards you mark "Review Again" come back until you've mastered them all.
+      <div className="bg-primary/10 border border-primary/20 rounded-xl p-4 text-sm">
+        <p className="font-semibold text-foreground mb-1">Flashcard Review — Chapter 2 Key Terms</p>
+        <p className="text-muted-foreground text-xs">Review all {cards.length} terms. Click each card to reveal the definition. You must view all cards before the Quiz unlocks.</p>
+        <div className="mt-2 h-1.5 bg-primary/20 rounded-full overflow-hidden">
+          <div className="h-full bg-primary rounded-full transition-all" role="progressbar" aria-valuenow={seen.size} aria-valuemin={0} aria-valuemax={cards.length} style={{ width: `${(seen.size / cards.length) * 100}%` }} />
+        </div>
+        <p className="text-xs text-muted-foreground mt-1">{seen.size}/{cards.length} cards reviewed</p>
+      </div>
+      <div onClick={handleFlip} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleFlip(); }}} role="button" tabIndex={0} aria-label={flipped ? "Card showing definition. Press to see term." : "Card showing term. Press to reveal definition."} className="cursor-pointer select-none bg-card border-2 border-border rounded-2xl p-6 min-h-[160px] flex flex-col items-center justify-center text-center shadow-sm hover:border-primary transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+        <span aria-live="polite" aria-atomic="true" className="sr-only">{flipped ? cards[idx].back : cards[idx].front}</span>
+        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">{flipped ? "Definition" : "Term"} — {idx + 1} / {cards.length}</p>
+        <p className={`font-semibold leading-relaxed ${flipped ? "text-sm text-muted-foreground" : "text-base text-foreground"}`}>
+          {flipped ? cards[idx].back : cards[idx].front}
         </p>
+        <p className="text-xs text-muted-foreground mt-4">{flipped ? "Click to see term" : "Click to reveal definition"}</p>
       </div>
-
-      {/* Progress */}
-      <div className="flex items-center justify-between text-xs text-muted-foreground">
-        <span aria-live="polite">{masteredCount}/{total} mastered</span>
-        <div className="flex gap-1" role="img" aria-label={`Progress: ${masteredCount} of ${total} cards mastered`}>
-          {CH2_CARDS.map((c) => (
-            <div key={c.id} aria-hidden="true"
-              className={`w-2 h-2 rounded-full transition-colors ${
-                mastered.has(c.id) ? "bg-green-500" :
-                reviewAgain.has(c.id) ? "bg-amber-400" : "bg-muted"
-              }`} />
-          ))}
-        </div>
-        <span className={`text-xs px-2 py-0.5 rounded-full border font-semibold ${cardTypeColor[current.type]}`}>
-          {cardTypeLabel[current.type]}
-        </span>
+      <div className="flex gap-2">
+        <button onClick={handlePrev} disabled={idx === 0} className="flex-1 py-2 rounded-xl border border-border text-sm font-medium text-foreground disabled:opacity-30 hover:bg-muted transition">← Prev</button>
+        <button onClick={handleNext} disabled={idx === cards.length - 1} className="flex-1 py-2 rounded-xl border border-border text-sm font-medium text-foreground disabled:opacity-30 hover:bg-muted transition">Next →</button>
       </div>
-
-      {/* Card */}
-      <div
-        className={`bg-card border-2 rounded-2xl p-6 min-h-48 flex flex-col transition-all cursor-pointer select-none ${
-          flipped ? "border-primary/40 bg-primary/5" : "border-border hover:border-primary/30"
-        }`}
-        onClick={() => { if (!flipped) { setFlipped(true); setShowHint(false); } }}
-        role="button"
-        tabIndex={0}
-        aria-label={flipped ? "Card answer — rate yourself below" : "Tap to flip card"}
-        onKeyDown={(e) => { if ((e.key === " " || e.key === "Enter") && !flipped) { setFlipped(true); setShowHint(false); } }}
-      >
-        {!flipped ? (
-          <div className="flex flex-col h-full">
-            <p className="text-sm font-semibold text-foreground leading-relaxed flex-1 whitespace-pre-line">
-              {current.front}
-            </p>
-            <div className="mt-4 space-y-2">
-              {current.hint && !showHint && (
-                <button type="button"
-                  onClick={(e) => { e.stopPropagation(); setShowHint(true); }}
-                  className="text-xs text-primary hover:underline focus-visible:outline-none">
-                  Show hint
-                </button>
-              )}
-              {showHint && current.hint && (
-                <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-1.5 italic">
-                  💡 {current.hint}
-                </p>
-              )}
-              <p className="text-xs text-muted-foreground text-center">Tap to reveal answer →</p>
-            </div>
-          </div>
-        ) : (
-          <div className="flex flex-col h-full">
-            <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">Answer</p>
-            <p className="text-sm text-foreground leading-relaxed flex-1 whitespace-pre-line">
-              {current.back}
-            </p>
-          </div>
-        )}
-      </div>
-
-      {/* Rating buttons — only show after flip */}
-      {flipped ? (
-        <div className="grid grid-cols-2 gap-3">
-          <button type="button" onClick={handleReviewAgain}
-            className="py-3 rounded-xl border-2 border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-800 font-semibold text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400">
-            🔄 Review Again
-          </button>
-          <button type="button" onClick={handleGotIt}
-            className="py-3 rounded-xl border-2 border-green-300 bg-green-50 hover:bg-green-100 text-green-800 font-semibold text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400">
-            ✓ Got It!
-          </button>
-        </div>
-      ) : (
-        <div className="h-12 flex items-center justify-center">
-          <p className="text-xs text-muted-foreground">Flip the card first, then rate yourself</p>
-        </div>
-      )}
-
-      {/* Remaining count */}
-      {deck.length > 1 && (
-        <p className="text-xs text-center text-muted-foreground">
-          {deck.length - 1} card{deck.length - 1 !== 1 ? "s" : ""} remaining in this pass
-        </p>
-      )}
+      <button disabled={!allSeen} onClick={() => onComplete(cards.length, cards.length)}
+        className="w-full py-3 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:opacity-90 transition disabled:opacity-40">
+        {allSeen ? "Mark Complete — Unlock Quiz ✓" : `Review all cards to unlock (${seen.size}/${cards.length})`}
+      </button>
     </div>
   );
 }

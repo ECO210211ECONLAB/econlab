@@ -4,7 +4,7 @@ import { ChevronLeft, Award, RotateCcw } from "lucide-react";
 // ─────────────────────────────────────────────
 // Types
 // ─────────────────────────────────────────────
-type Station = "intro" | "recap" | "barriers" | "mrdemand" | "profitmax" | "compare" | "natmonopoly" | "quiz" | "results" | "not-yet";
+type Station = "intro" | "recap" | "barriers" | "mrdemand" | "profitmax" | "compare" | "natmonopoly" | "flash" | "quiz" | "results" | "not-yet";
 
 // ─────────────────────────────────────────────
 // Utilities
@@ -888,6 +888,67 @@ const QUIZ_BANK = [
   { q: "Which of the following are examples of barriers to entry that create monopoly power? (Select all that apply)", opts: ["A firm owns the only known deposit of a rare mineral", "A pharmaceutical company holds a patent on a life-saving drug", "A firm competes in a market with thousands of identical sellers", "A utility company benefits from natural monopoly economies of scale"], correct: [0, 1, 3], multi: true, exp: "Resource control, patents, and natural monopoly economies of scale are all barriers to entry. Competing with thousands of identical sellers is perfect competition — no monopoly power." },
 ];
 
+const FLASHCARDS = [
+  { front: "Monopoly", back: "A market structure with a single seller of a product with no close substitutes. The monopolist is a price maker — it faces the entire downward-sloping market demand curve." },
+  { front: "Barrier to Entry", back: "Any factor that prevents new firms from entering a market. Types: legal barriers (patents, licenses), natural monopoly (economies of scale), control of resources, network effects." },
+  { front: "Price Maker", back: "A firm that has pricing power — it can set price rather than accepting the market price. Monopolists and oligopolists are price makers. They face a downward-sloping demand curve." },
+  { front: "MR < P for a Monopolist", back: "To sell one more unit, a monopolist must lower price on ALL units sold. So MR < P. The MR curve lies below the demand curve (twice as steep for linear demand)." },
+  { front: "Monopolist's Profit-Maximizing Rule", back: "Produce where MR = MC (same rule as perfect competition). Then find price by going UP to the demand curve at that quantity. Profit = (P − ATC) × Q." },
+  { front: "Deadweight Loss (Monopoly)", back: "The loss of total surplus caused by monopoly underproduction. The monopolist restricts output below the competitive level — the units not produced had value to consumers exceeding their cost." },
+  { front: "Natural Monopoly", back: "A market where one firm can supply the entire quantity demanded at lower cost than two or more firms — due to very large economies of scale. LRAC falls continuously over the relevant range." },
+  { front: "Price Discrimination", back: "Charging different prices to different customers for the same good, based on their willingness to pay. Requires: pricing power, ability to separate markets, inability to resell." },
+  { front: "Cost-Plus Regulation", back: "Regulators set price = ATC, allowing a normal profit but not economic profit. Problem: reduces incentive to cut costs — the firm can pass all costs to consumers." },
+  { front: "Price Cap Regulation", back: "Regulators set a maximum price below the monopoly price. Creates stronger efficiency incentives than cost-plus — the firm keeps any cost savings as profit." },
+  { front: "Allocative Inefficiency (Monopoly)", back: "A monopolist produces where P > MC — consumers value additional units more than they cost to produce. Underproduction relative to the socially optimal quantity (P = MC)." },
+  { front: "Productive Inefficiency (Monopoly)", back: "A monopolist does NOT produce at minimum ATC. It produces less than the output at which ATC is minimized — per-unit costs are higher than necessary." },
+];
+
+function FlashcardStation({ onComplete }: { onComplete: (score: number, total: number) => void }) {
+  const [cards] = useState(() => shuffle([...FLASHCARDS]));
+  const [idx, setIdx] = useState(0);
+  const [flipped, setFlipped] = useState(false);
+  const [seen, setSeen] = useState<Set<number>>(new Set());
+
+  function handleFlip() { setFlipped(f => !f); }
+  function handleNext() {
+    setSeen(s => new Set([...s, idx]));
+    if (idx < cards.length - 1) { setIdx(i => i + 1); setFlipped(false); }
+  }
+  function handlePrev() {
+    if (idx > 0) { setIdx(i => i - 1); setFlipped(false); }
+  }
+  const allSeen = seen.size >= cards.length - 1;
+
+  return (
+    <div className="max-w-lg mx-auto space-y-4">
+      <div className="bg-primary/10 border border-primary/20 rounded-xl p-4 text-sm">
+        <p className="font-semibold text-foreground mb-1">Flashcard Review — Chapter 9 Key Terms</p>
+        <p className="text-muted-foreground text-xs">Review all {cards.length} terms. Click each card to reveal the definition. You must view all cards before the Quiz unlocks.</p>
+        <div className="mt-2 h-1.5 bg-primary/20 rounded-full overflow-hidden">
+          <div className="h-full bg-primary rounded-full transition-all" role="progressbar" aria-valuenow={seen.size} aria-valuemin={0} aria-valuemax={cards.length} style={{ width: `${(seen.size / cards.length) * 100}%` }} />
+        </div>
+        <p className="text-xs text-muted-foreground mt-1">{seen.size}/{cards.length} cards reviewed</p>
+      </div>
+      <div onClick={handleFlip} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleFlip(); }}} role="button" tabIndex={0} aria-label={flipped ? "Card showing definition. Press to see term." : "Card showing term. Press to reveal definition."} className="cursor-pointer select-none bg-card border-2 border-border rounded-2xl p-6 min-h-[160px] flex flex-col items-center justify-center text-center shadow-sm hover:border-primary transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+        <span aria-live="polite" aria-atomic="true" className="sr-only">{flipped ? cards[idx].back : cards[idx].front}</span>
+        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">{flipped ? "Definition" : "Term"} — {idx + 1} / {cards.length}</p>
+        <p className={`font-semibold leading-relaxed ${flipped ? "text-sm text-muted-foreground" : "text-base text-foreground"}`}>
+          {flipped ? cards[idx].back : cards[idx].front}
+        </p>
+        <p className="text-xs text-muted-foreground mt-4">{flipped ? "Click to see term" : "Click to reveal definition"}</p>
+      </div>
+      <div className="flex gap-2">
+        <button onClick={handlePrev} disabled={idx === 0} className="flex-1 py-2 rounded-xl border border-border text-sm font-medium text-foreground disabled:opacity-30 hover:bg-muted transition">← Prev</button>
+        <button onClick={handleNext} disabled={idx === cards.length - 1} className="flex-1 py-2 rounded-xl border border-border text-sm font-medium text-foreground disabled:opacity-30 hover:bg-muted transition">Next →</button>
+      </div>
+      <button disabled={!allSeen} onClick={() => onComplete(cards.length, cards.length)}
+        className="w-full py-3 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:opacity-90 transition disabled:opacity-40">
+        {allSeen ? "Mark Complete — Unlock Quiz ✓" : `Review all cards to unlock (${seen.size}/${cards.length})`}
+      </button>
+    </div>
+  );
+}
+
 function QuizStation({ onPass, onFail }: { onPass: (score: number, results: { correct: boolean; exp: string }[]) => void; onFail: (score: number, results: { correct: boolean; exp: string }[]) => void }) {
   const [questions] = useState(() => shuffle(QUIZ_BANK).map(q => {
     const s = shuffleOpts(q.opts, q.correct);
@@ -1173,7 +1234,7 @@ function Header({ station, onStation, completed }: { station: Station; onStation
   ];
   const CONTENT_STATIONS: Station[] = ["recap","barriers","mrdemand","profitmax","compare","natmonopoly"];
   const allDone = CONTENT_STATIONS.every(s => completed.has(s as Station));
-  const stationOrder: Station[] = ["intro","recap","barriers","mrdemand","profitmax","compare","natmonopoly","quiz","results","not-yet"];
+  const stationOrder: Station[] = ["intro","recap","barriers","mrdemand","profitmax","compare","natmonopoly","flash","flash","quiz","results","not-yet"];
   const currentIdx = stationOrder.indexOf(station);
 
   return (
@@ -1303,6 +1364,7 @@ export default function EconLab() {
         )}
 
         {/* Quiz */}
+        {station === "flash" && <FlashcardStation onComplete={(sc, t) => { markDone("flash"); }} />}
         {station === "quiz" && (
           <div className="space-y-4">
             <div className="flex items-center gap-3">

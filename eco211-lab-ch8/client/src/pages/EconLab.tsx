@@ -4,7 +4,7 @@ import { ChevronLeft, Award, RotateCcw } from "lucide-react";
 // ─────────────────────────────────────────────
 // Types
 // ─────────────────────────────────────────────
-type Station = "intro" | "recap" | "spectrum" | "conditions" | "profitmax" | "outcomes" | "longrun" | "quiz" | "results" | "not-yet";
+type Station = "intro" | "recap" | "spectrum" | "conditions" | "profitmax" | "outcomes" | "longrun" | "flash" | "quiz" | "results" | "not-yet";
 
 // ─────────────────────────────────────────────
 // Utilities
@@ -1040,6 +1040,67 @@ const QUIZ_BANK = [
   },
 ];
 
+const FLASHCARDS = [
+  { front: "Perfect Competition", back: "A market structure with: (1) many sellers, (2) identical (homogeneous) products, (3) free entry and exit, (4) perfect information. No single firm has pricing power." },
+  { front: "Price Taker", back: "A firm that accepts the market price as given — it cannot raise or lower price. Perfectly competitive firms are price takers. MR = P for a price taker." },
+  { front: "Marginal Revenue (MR)", back: "The additional revenue from selling one more unit. For a perfectly competitive firm: MR = P (price is constant). For a monopolist: MR < P." },
+  { front: "Profit-Maximizing Rule", back: "Produce where MR = MC. At this output, the last unit adds exactly as much to revenue as to cost. Applies to ALL market structures." },
+  { front: "Shutdown Rule", back: "In the short run, a firm should shut down (produce Q=0) if P < AVC. If P ≥ AVC, operate even if making a loss — at least covering variable costs." },
+  { front: "Break-Even Point", back: "The output level where TR = TC, so economic profit = zero. For a competitive firm: where P = ATC (minimum). Normal profit, not loss." },
+  { front: "Long-Run Competitive Equilibrium", back: "Positive profits attract entry → supply increases → price falls → profits = zero. Losses trigger exit → supply decreases → price rises → losses = zero. Long-run: P = min ATC." },
+  { front: "Productive Efficiency", back: "Producing at minimum ATC — no waste. Perfectly competitive firms achieve this in long-run equilibrium (P = min ATC)." },
+  { front: "Allocative Efficiency", back: "Producing the quantity where P = MC — the value consumers place on the last unit equals its cost. Perfectly competitive markets achieve this." },
+  { front: "Consumer Surplus", back: "The difference between what consumers are willing to pay and what they actually pay. The area above the price line and below the demand curve." },
+  { front: "Producer Surplus", back: "The difference between the price a producer receives and the minimum they would accept. The area below the price line and above the supply curve." },
+  { front: "Total Surplus (Social Welfare)", back: "Consumer Surplus + Producer Surplus. Maximized at competitive equilibrium. Any deviation (monopoly, price controls) reduces total surplus and creates deadweight loss." },
+];
+
+function FlashcardStation({ onComplete }: { onComplete: (score: number, total: number) => void }) {
+  const [cards] = useState(() => shuffle([...FLASHCARDS]));
+  const [idx, setIdx] = useState(0);
+  const [flipped, setFlipped] = useState(false);
+  const [seen, setSeen] = useState<Set<number>>(new Set());
+
+  function handleFlip() { setFlipped(f => !f); }
+  function handleNext() {
+    setSeen(s => new Set([...s, idx]));
+    if (idx < cards.length - 1) { setIdx(i => i + 1); setFlipped(false); }
+  }
+  function handlePrev() {
+    if (idx > 0) { setIdx(i => i - 1); setFlipped(false); }
+  }
+  const allSeen = seen.size >= cards.length - 1;
+
+  return (
+    <div className="max-w-lg mx-auto space-y-4">
+      <div className="bg-primary/10 border border-primary/20 rounded-xl p-4 text-sm">
+        <p className="font-semibold text-foreground mb-1">Flashcard Review — Chapter 8 Key Terms</p>
+        <p className="text-muted-foreground text-xs">Review all {cards.length} terms. Click each card to reveal the definition. You must view all cards before the Quiz unlocks.</p>
+        <div className="mt-2 h-1.5 bg-primary/20 rounded-full overflow-hidden">
+          <div className="h-full bg-primary rounded-full transition-all" role="progressbar" aria-valuenow={seen.size} aria-valuemin={0} aria-valuemax={cards.length} style={{ width: `${(seen.size / cards.length) * 100}%` }} />
+        </div>
+        <p className="text-xs text-muted-foreground mt-1">{seen.size}/{cards.length} cards reviewed</p>
+      </div>
+      <div onClick={handleFlip} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleFlip(); }}} role="button" tabIndex={0} aria-label={flipped ? "Card showing definition. Press to see term." : "Card showing term. Press to reveal definition."} className="cursor-pointer select-none bg-card border-2 border-border rounded-2xl p-6 min-h-[160px] flex flex-col items-center justify-center text-center shadow-sm hover:border-primary transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+        <span aria-live="polite" aria-atomic="true" className="sr-only">{flipped ? cards[idx].back : cards[idx].front}</span>
+        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">{flipped ? "Definition" : "Term"} — {idx + 1} / {cards.length}</p>
+        <p className={`font-semibold leading-relaxed ${flipped ? "text-sm text-muted-foreground" : "text-base text-foreground"}`}>
+          {flipped ? cards[idx].back : cards[idx].front}
+        </p>
+        <p className="text-xs text-muted-foreground mt-4">{flipped ? "Click to see term" : "Click to reveal definition"}</p>
+      </div>
+      <div className="flex gap-2">
+        <button onClick={handlePrev} disabled={idx === 0} className="flex-1 py-2 rounded-xl border border-border text-sm font-medium text-foreground disabled:opacity-30 hover:bg-muted transition">← Prev</button>
+        <button onClick={handleNext} disabled={idx === cards.length - 1} className="flex-1 py-2 rounded-xl border border-border text-sm font-medium text-foreground disabled:opacity-30 hover:bg-muted transition">Next →</button>
+      </div>
+      <button disabled={!allSeen} onClick={() => onComplete(cards.length, cards.length)}
+        className="w-full py-3 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:opacity-90 transition disabled:opacity-40">
+        {allSeen ? "Mark Complete — Unlock Quiz ✓" : `Review all cards to unlock (${seen.size}/${cards.length})`}
+      </button>
+    </div>
+  );
+}
+
 function QuizStation({ onPass, onFail }: { onPass: (score: number, results: { correct: boolean; exp: string }[]) => void; onFail: (score: number, results: { correct: boolean; exp: string }[]) => void }) {
   const [questions] = useState(() => shuffle(QUIZ_BANK).map(q => {
     const s = shuffleOpts(q.opts, q.correct);
@@ -1333,7 +1394,7 @@ function Header({ station, onStation, completed }: { station: Station; onStation
   ];
   const CONTENT_STATIONS: Station[] = ["recap","spectrum","conditions","profitmax","outcomes","longrun"];
   const allDone = CONTENT_STATIONS.every(s => completed.has(s as Station));
-  const stationOrder: Station[] = ["intro","recap","spectrum","conditions","profitmax","outcomes","longrun","quiz","results","not-yet"];
+  const stationOrder: Station[] = ["intro","recap","spectrum","conditions","profitmax","outcomes","longrun","flash","flash","quiz","results","not-yet"];
   const currentIdx = stationOrder.indexOf(station);
 
   return (
@@ -1496,6 +1557,7 @@ export default function EconLab() {
         )}
 
         {/* Quiz */}
+        {station === "flash" && <FlashcardStation onComplete={(sc, t) => { markDone("flash"); }} />}
         {station === "quiz" && (
           <div className="space-y-4">
             <div className="flex items-center gap-3">

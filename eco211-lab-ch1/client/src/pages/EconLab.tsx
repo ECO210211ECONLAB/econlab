@@ -773,205 +773,65 @@ interface Flashcard {
   front: string; back: string; hint?: string;
 }
 
-const CH1_CARDS: Flashcard[] = [
-  // ── Basic flip (6) ──────────────────────────────────────
-  {
-    id: 1, type: "basic",
-    front: "What is the definition of economics?",
-    back: "The study of how individuals and societies allocate scarce resources among competing uses.\n\nKey word: SCARCE — unlimited wants, limited resources.",
-  },
-  {
-    id: 2, type: "basic",
-    front: "What is the difference between microeconomics and macroeconomics?",
-    back: "Microeconomics: studies individual decision-makers — households, firms, specific markets.\n\nMacroeconomics: studies the economy as a whole — GDP, inflation, unemployment, national output.",
-  },
-  {
-    id: 3, type: "basic",
-    front: "What are the five factors of production?",
-    back: "Land — natural resources (soil, water, minerals)\nLabor — human work effort\nCapital — tools, machines, buildings used in production\nEntrepreneurship — organizing the others and bearing risk\nTime — an increasingly recognized scarce input (speed-to-market, project deadlines, turnaround time)",
-  },
-  {
-    id: 4, type: "basic",
-    front: "What is Adam Smith's 'invisible hand'?",
-    back: "The idea that individuals pursuing their own self-interest are guided, as if by an invisible hand, to produce outcomes that benefit society as a whole.\n\nPrices coordinate these decentralized decisions without central planning.",
-  },
-  {
-    id: 5, type: "basic",
-    front: "What is a positive economic statement? What is a normative statement?",
-    back: "Positive: a factual, testable claim about how the world IS.\nExample: 'Raising the minimum wage reduces teen employment by 2%.'\n\nNormative: a value judgment about how the world SHOULD be.\nExample: 'The minimum wage should be raised to $20.'",
-  },
-  {
-    id: 6, type: "basic",
-    front: "What are the three basic economic systems — and the key question each answers differently?",
-    back: "Every economy must answer: What to produce? How to produce it? For whom?\n\nTraditional: customs and tradition decide.\nCommand: government decides.\nMarket: prices and individual decisions decide.\nMixed: combination of market and government.",
-  },
-  // ── Cloze (4) ──────────────────────────────────────────
-  {
-    id: 7, type: "cloze",
-    front: "Complete: Scarcity means that resources are {{c1::limited}} while human wants are {{c2::unlimited}}.",
-    back: "Resources are LIMITED. Human wants are UNLIMITED.\n\nThis fundamental tension forces every individual and society to make choices — and every choice involves an opportunity cost.",
-    hint: "Think: what resources are vs. what people want.",
-  },
-  {
-    id: 8, type: "cloze",
-    front: "Complete: Division of labor increases {{c1::productivity}} by allowing workers to {{c2::specialize}} in specific tasks.",
-    back: "Division of labor increases PRODUCTIVITY by allowing workers to SPECIALIZE.\n\nAdam Smith's pin factory example: 10 workers each doing one step → 48,000 pins/day vs. ~200 if each made whole pins alone.",
-    hint: "Think: what specialization does to output per worker.",
-  },
-  {
-    id: 9, type: "cloze",
-    front: "Complete: In the circular flow model, households provide {{c1::factors of production}} to firms and receive {{c2::income}} in return.",
-    back: "Households provide FACTORS OF PRODUCTION (land, labor, capital, entrepreneurship) to firms and receive INCOME (wages, rent, interest, profit) in return.\n\nFirms use those factors to produce goods and services, which flow back to households.",
-    hint: "Think about what households give and what they get back.",
-  },
-  {
-    id: 10, type: "cloze",
-    front: "Complete: Economics is a {{c1::social}} science. It uses {{c2::models}} to simplify reality and understand behavior.",
-    back: "Economics is a SOCIAL science — it studies human behavior.\n\nEconomists build MODELS (simplifications of reality) to isolate key relationships. Models describe patterns of behavior, not individual calculations.",
-    hint: "Think: what kind of science, and what tool economists use.",
-  },
-  {
-    id: 13, type: "cloze",
-    front: "A {{c1::theory}} is a simplified explanation of how parts of the world fit together. A {{c2::model}} is a theory made operational — a specific representation we can test against data.",
-    back: "Theory: focuses on essential relationships, ignores irrelevant detail.\nExample: The law of demand — when price rises, quantity demanded falls.\n\nModel: a theory made visual or mathematical.\nExample: A supply-and-demand graph; the circular flow diagram.\n\nKey: Economic models are thinking TOOLS, not perfect descriptions of reality.",
-    hint: "Theory explains WHY. Model makes it testable and visual.",
-  },
-  // ── Scenario / Apply It (2) ────────────────────────────
-  {
-    id: 11, type: "scenario",
-    front: "Classify each as Micro or Macro:\n\n1. Why did the U.S. inflation rate rise to 9% in 2022?\n2. How does a coffee shop decide how many baristas to hire?\n3. What caused the 2008 national recession?\n4. Why do nurses earn more than retail workers?",
-    back: "1. Macro — national price level\n2. Micro — individual firm decision\n3. Macro — economy-wide output collapse\n4. Micro — wages in specific labor markets\n\nKey: Macro = big picture (whole economy). Micro = zoom in (specific markets, firms, individuals).",
-    hint: "Is it about the whole economy or a specific market/firm?",
-  },
-  {
-    id: 12, type: "scenario",
-    front: "Classify each as Positive or Normative:\n\n1. 'People with college degrees earn 67% more than high school graduates.'\n2. 'Everyone should go to college.'\n3. 'A $15 minimum wage reduces employment among teenagers.'\n4. 'The government should raise the minimum wage.'",
-    back: "1. Positive — measurable, testable fact\n2. Normative — value judgment ('should')\n3. Positive — testable empirical claim\n4. Normative — policy opinion ('should')\n\nTip: Look for 'should,' 'ought,' 'better,' 'fair' — those signal normative statements.",
-    hint: "Look for the word 'should' as a normative signal.",
-  },
+const FLASHCARDS = [
+  { front: "Economics", back: "The study of how individuals and societies allocate scarce resources among competing uses. Key word: scarcity — unlimited wants, limited resources." },
+  { front: "Microeconomics", back: "The study of individual decision-makers — households, firms, and specific markets. Asks: how does this market work?" },
+  { front: "Macroeconomics", back: "The study of the economy as a whole — GDP, inflation, unemployment, and national output. Asks: how is the whole economy doing?" },
+  { front: "Scarcity", back: "Resources are limited while human wants are unlimited. This fundamental tension forces every individual and society to make choices." },
+  { front: "Factors of Production", back: "The five inputs used to produce goods and services: Land (natural resources), Labor (human effort), Capital (tools and machines), Entrepreneurship (organizing and risk-bearing), and Time." },
+  { front: "Opportunity Cost", back: "The value of the next-best alternative you give up when making a choice. Every choice has an opportunity cost — even choosing to do nothing." },
+  { front: "Positive Statement", back: "A factual, testable claim about how the world IS. Example: 'Raising the minimum wage reduces teen employment by 2%.' Can be true or false — but can be tested with data." },
+  { front: "Normative Statement", back: "A value judgment about how the world SHOULD be. Example: 'The minimum wage should be raised to $20.' Cannot be proven true or false — depends on values." },
+  { front: "Invisible Hand", back: "Adam Smith's idea that individuals pursuing their own self-interest are guided, as if by an invisible hand, to produce outcomes that benefit society — without central planning." },
+  { front: "Division of Labor", back: "Breaking production into specialized tasks performed by different workers. Increases productivity dramatically. Smith's pin factory: 10 specialized workers → 48,000 pins/day vs. ~200 if each made whole pins alone." },
+  { front: "Circular Flow Model", back: "A model showing how households and firms interact in two markets: (1) product markets (firms sell, households buy) and (2) factor markets (households provide labor/capital, firms pay wages/rent)." },
+  { front: "Command Economy", back: "An economic system where the government makes all decisions about what to produce, how to produce it, and for whom. Also called a centrally planned economy." },
+  { front: "Market Economy", back: "An economic system where prices and individual decisions (not government) coordinate production and consumption. Prices signal scarcity and reward producers." },
+  { front: "Ceteris Paribus", back: "Latin for 'all else equal.' When analyzing a relationship between two variables, economists hold all other factors constant. This isolates the effect of one change at a time." },
 ];
 
 function FlashcardStation({ onComplete }: { onComplete: (score: number, total: number) => void }) {
-  const [deck, setDeck] = useState<Flashcard[]>([...CH1_CARDS]);
+  const [cards] = useState(() => shuffle([...FLASHCARDS]));
+  const [idx, setIdx] = useState(0);
   const [flipped, setFlipped] = useState(false);
-  const [mastered, setMastered] = useState<Set<number>>(new Set());
-  const [reviewAgain, setReviewAgain] = useState<Set<number>>(new Set());
-  const [done, setDone] = useState(false);
-  const [showHint, setShowHint] = useState(false);
+  const [seen, setSeen] = useState<Set<number>>(new Set());
 
-  const total = CH1_CARDS.length;
-  const masteredCount = mastered.size;
-  const current = deck[0];
-
-  function handleGotIt() {
-    const newMastered = new Set(mastered);
-    newMastered.add(current.id);
-    const newReview = new Set(reviewAgain);
-    newReview.delete(current.id);
-    setMastered(newMastered);
-    setReviewAgain(newReview);
-    const remaining = deck.slice(1).filter(c => !newMastered.has(c.id));
-    if (remaining.length === 0) { setDone(true); return; }
-    setDeck(remaining);
-    setFlipped(false);
-    setShowHint(false);
+  function handleFlip() { setFlipped(f => !f); }
+  function handleNext() {
+    setSeen(s => new Set([...s, idx]));
+    if (idx < cards.length - 1) { setIdx(i => i + 1); setFlipped(false); }
   }
-
-  function handleReviewAgain() {
-    const newReview = new Set(reviewAgain);
-    newReview.add(current.id);
-    setReviewAgain(newReview);
-    const newDeck = [...deck.slice(1), current];
-    setDeck(newDeck);
-    setFlipped(false);
-    setShowHint(false);
+  function handlePrev() {
+    if (idx > 0) { setIdx(i => i - 1); setFlipped(false); }
   }
-
-  const cardTypeLabel: Record<CardType, string> = { basic: "Flip Card", cloze: "Fill in the Blank", scenario: "Apply It" };
-  const cardTypeColor: Record<CardType, string> = {
-    basic: "bg-blue-50 border-blue-200 text-blue-700",
-    cloze: "bg-amber-50 border-amber-200 text-amber-700",
-    scenario: "bg-purple-50 border-purple-200 text-purple-700",
-  };
-
-  if (done) return (
-    <div className="max-w-lg mx-auto space-y-4">
-      <div className="bg-green-50 border border-green-200 rounded-2xl p-6 text-center">
-        <p className="text-3xl mb-2">🎴</p>
-        <p className="text-lg font-bold text-green-800">All {total} cards mastered!</p>
-        <p className="text-sm text-green-700 mt-1">You cleared the full Ch1 deck. The quiz is now unlocked.</p>
-      </div>
-      <button type="button" onClick={() => onComplete(total, total)}
-        className="w-full py-3 bg-primary hover:opacity-90 text-primary-foreground rounded-xl font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary">
-        Mark Complete ✓
-      </button>
-    </div>
-  );
+  const allSeen = seen.size >= cards.length - 1;
 
   return (
     <div className="max-w-lg mx-auto space-y-4">
-      <div className="bg-primary/10 border border-primary/20 rounded-xl p-4">
-        <p className="font-semibold text-sm text-foreground mb-1">Flashcard Review — Chapter 1</p>
-        <p className="text-xs text-muted-foreground">Read each card, think of your answer, then flip. Rate yourself honestly — cards marked "Review Again" come back until you master them all.</p>
-      </div>
-      <div className="flex items-center justify-between text-xs text-muted-foreground">
-        <span aria-live="polite">{masteredCount}/{total} mastered</span>
-        <div className="flex gap-1" role="img" aria-label={`Progress: ${masteredCount} of ${total} cards mastered`}>
-          {CH1_CARDS.map((c) => (
-            <div key={c.id} aria-hidden="true"
-              className={`w-2 h-2 rounded-full transition-colors ${mastered.has(c.id) ? "bg-green-500" : reviewAgain.has(c.id) ? "bg-amber-400" : "bg-muted"}`} />
-          ))}
+      <div className="bg-primary/10 border border-primary/20 rounded-xl p-4 text-sm">
+        <p className="font-semibold text-foreground mb-1">Flashcard Review — Chapter 1 Key Terms</p>
+        <p className="text-muted-foreground text-xs">Review all {cards.length} terms. Click each card to reveal the definition. You must view all cards before the Quiz unlocks.</p>
+        <div className="mt-2 h-1.5 bg-primary/20 rounded-full overflow-hidden">
+          <div className="h-full bg-primary rounded-full transition-all" role="progressbar" aria-valuenow={seen.size} aria-valuemin={0} aria-valuemax={cards.length} style={{ width: `${(seen.size / cards.length) * 100}%` }} />
         </div>
-        <span className={`text-xs px-2 py-0.5 rounded-full border font-semibold ${cardTypeColor[current.type]}`}>
-          {cardTypeLabel[current.type]}
-        </span>
+        <p className="text-xs text-muted-foreground mt-1">{seen.size}/{cards.length} cards reviewed</p>
       </div>
-      <div
-        className={`bg-card border-2 rounded-2xl p-6 min-h-48 flex flex-col transition-all cursor-pointer select-none ${flipped ? "border-primary/40 bg-primary/5" : "border-border hover:border-primary/30"}`}
-        onClick={() => { if (!flipped) { setFlipped(true); setShowHint(false); } }}
-        role="button" tabIndex={0} aria-label={flipped ? "Card answer — rate yourself below" : "Tap to flip card"}
-        onKeyDown={(e) => { if ((e.key === " " || e.key === "Enter") && !flipped) { setFlipped(true); setShowHint(false); } }}
-      >
-        {!flipped ? (
-          <div className="flex flex-col h-full">
-            <p className="text-sm font-semibold text-foreground leading-relaxed flex-1 whitespace-pre-line">{current.front.replace(/\{\{c\d+::([^}]+)\}\}/g, "____")}</p>
-            <div className="mt-4 space-y-2">
-              {current.hint && !showHint && (
-                <button type="button" onClick={(e) => { e.stopPropagation(); setShowHint(true); }}
-                  className="text-xs text-primary hover:underline focus-visible:outline-none">Show hint</button>
-              )}
-              {showHint && current.hint && (
-                <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-1.5 italic">💡 {current.hint}</p>
-              )}
-              <p className="text-xs text-muted-foreground text-center">Tap to reveal answer →</p>
-            </div>
-          </div>
-        ) : (
-          <div className="flex flex-col h-full">
-            <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">Answer</p>
-            <p className="text-sm text-foreground leading-relaxed flex-1 whitespace-pre-line">{current.back}</p>
-          </div>
-        )}
+      <div onClick={handleFlip} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleFlip(); }}} role="button" tabIndex={0} aria-label={flipped ? "Card showing definition. Press to see term." : "Card showing term. Press to reveal definition."} className="cursor-pointer select-none bg-card border-2 border-border rounded-2xl p-6 min-h-[160px] flex flex-col items-center justify-center text-center shadow-sm hover:border-primary transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+        <span aria-live="polite" aria-atomic="true" className="sr-only">{flipped ? cards[idx].back : cards[idx].front}</span>
+        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">{flipped ? "Definition" : "Term"} — {idx + 1} / {cards.length}</p>
+        <p className={`font-semibold leading-relaxed ${flipped ? "text-sm text-muted-foreground" : "text-base text-foreground"}`}>
+          {flipped ? cards[idx].back : cards[idx].front}
+        </p>
+        <p className="text-xs text-muted-foreground mt-4">{flipped ? "Click to see term" : "Click to reveal definition"}</p>
       </div>
-      {flipped ? (
-        <div className="grid grid-cols-2 gap-3">
-          <button type="button" onClick={handleReviewAgain}
-            className="py-3 rounded-xl border-2 border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-800 font-semibold text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400">
-            🔄 Review Again
-          </button>
-          <button type="button" onClick={handleGotIt}
-            className="py-3 rounded-xl border-2 border-green-300 bg-green-50 hover:bg-green-100 text-green-800 font-semibold text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400">
-            ✓ Got It!
-          </button>
-        </div>
-      ) : (
-        <div className="h-12 flex items-center justify-center">
-          <p className="text-xs text-muted-foreground">Flip the card first, then rate yourself</p>
-        </div>
-      )}
-      {deck.length > 1 && (
-        <p className="text-xs text-center text-muted-foreground">{deck.length - 1} card{deck.length - 1 !== 1 ? "s" : ""} remaining in this pass</p>
-      )}
+      <div className="flex gap-2">
+        <button onClick={handlePrev} disabled={idx === 0} className="flex-1 py-2 rounded-xl border border-border text-sm font-medium text-foreground disabled:opacity-30 hover:bg-muted transition">← Prev</button>
+        <button onClick={handleNext} disabled={idx === cards.length - 1} className="flex-1 py-2 rounded-xl border border-border text-sm font-medium text-foreground disabled:opacity-30 hover:bg-muted transition">Next →</button>
+      </div>
+      <button disabled={!allSeen} onClick={() => onComplete(cards.length, cards.length)}
+        className="w-full py-3 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:opacity-90 transition disabled:opacity-40">
+        {allSeen ? "Mark Complete — Unlock Quiz ✓" : `Review all cards to unlock (${seen.size}/${cards.length})`}
+      </button>
     </div>
   );
 }

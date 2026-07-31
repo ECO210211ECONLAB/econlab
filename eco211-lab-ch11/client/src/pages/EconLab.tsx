@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { ChevronLeft, Award, RotateCcw } from "lucide-react";
 
-type Station = "intro" | "recap" | "hhi" | "merger" | "anticomp" | "natmonreg" | "deregulation" | "quiz" | "results" | "not-yet";
+type Station = "intro" | "recap" | "hhi" | "merger" | "anticomp" | "natmonreg" | "deregulation" | "flash" | "quiz" | "results" | "not-yet";
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -777,6 +777,67 @@ const QUIZ_BANK = [
   { q: "Which of the following are restrictive practices that may reduce competition and face antitrust scrutiny? (Select all that apply)", opts: ["Tie-in sales (must buy Product B to get Product A)", "Volume discount negotiations with suppliers", "Predatory pricing (pricing below cost to eliminate a rival)", "Exclusive dealing that forecloses rivals from the market"], correct: [0, 2, 3], multi: true, exp: "Tie-in sales, predatory pricing, and exclusive dealing that harms competition are all practices that antitrust authorities scrutinize. Volume discounts are a normal business practice — not anticompetitive." },
 ];
 
+const FLASHCARDS = [
+  { front: "Antitrust Law", back: "Laws designed to promote competition and prevent monopolization. U.S. foundations: Sherman Act (1890) — prohibits price-fixing and monopolization; Clayton Act (1914) — prohibits anticompetitive mergers." },
+  { front: "Horizontal Merger", back: "A merger between firms in the same industry at the same stage of production. Most scrutinized by antitrust regulators — directly reduces competition." },
+  { front: "Vertical Merger", back: "A merger between firms at different stages of the same supply chain. Example: a manufacturer acquiring its supplier. Less likely to reduce competition than horizontal mergers." },
+  { front: "Regulatory Capture", back: "When the agency meant to regulate an industry ends up serving the industry's interests instead of the public's. Regulators become too close to the firms they oversee." },
+  { front: "Cost-Plus Regulation", back: "Regulators set price = ATC, allowing normal profit. Problem: no incentive to cut costs — firms pass all expenses to consumers. Rewards inefficiency." },
+  { front: "Price Cap Regulation", back: "Regulators set a maximum price. Firm keeps cost savings as profit. Creates incentive for efficiency — unlike cost-plus. Used for utilities and telecom." },
+  { front: "Natural Monopoly Regulation", back: "Natural monopolies (utilities, railroads) are regulated rather than broken up because a single firm can serve the market at lower cost. Goal: keep price near ATC while providing universal service." },
+  { front: "Predatory Pricing", back: "Setting prices below cost to drive out competitors, then raising prices once rivals exit. Illegal when intent to monopolize is proven. Difficult to prove in practice." },
+  { front: "Tying Contract", back: "Requiring buyers of one product to also buy another product from the same seller. Can be anticompetitive if it forecloses competitors from the tied market. Subject to antitrust scrutiny." },
+  { front: "FTC (Federal Trade Commission)", back: "U.S. agency that enforces antitrust law and consumer protection. Reviews mergers, investigates anticompetitive practices. Works alongside the Department of Justice Antitrust Division." },
+  { front: "Market Concentration", back: "The degree to which a small number of firms dominate a market. Measured by HHI. High concentration = less competition = more pricing power = potential antitrust concern." },
+  { front: "Deregulation", back: "Reducing government regulation of an industry — relying more on market competition. U.S. examples: airlines (1978), trucking, telecommunications. Can lower prices but raises concerns about safety and access." },
+];
+
+function FlashcardStation({ onComplete }: { onComplete: (score: number, total: number) => void }) {
+  const [cards] = useState(() => shuffle([...FLASHCARDS]));
+  const [idx, setIdx] = useState(0);
+  const [flipped, setFlipped] = useState(false);
+  const [seen, setSeen] = useState<Set<number>>(new Set());
+
+  function handleFlip() { setFlipped(f => !f); }
+  function handleNext() {
+    setSeen(s => new Set([...s, idx]));
+    if (idx < cards.length - 1) { setIdx(i => i + 1); setFlipped(false); }
+  }
+  function handlePrev() {
+    if (idx > 0) { setIdx(i => i - 1); setFlipped(false); }
+  }
+  const allSeen = seen.size >= cards.length - 1;
+
+  return (
+    <div className="max-w-lg mx-auto space-y-4">
+      <div className="bg-primary/10 border border-primary/20 rounded-xl p-4 text-sm">
+        <p className="font-semibold text-foreground mb-1">Flashcard Review — Chapter 11 Key Terms</p>
+        <p className="text-muted-foreground text-xs">Review all {cards.length} terms. Click each card to reveal the definition. You must view all cards before the Quiz unlocks.</p>
+        <div className="mt-2 h-1.5 bg-primary/20 rounded-full overflow-hidden">
+          <div className="h-full bg-primary rounded-full transition-all" role="progressbar" aria-valuenow={seen.size} aria-valuemin={0} aria-valuemax={cards.length} style={{ width: `${(seen.size / cards.length) * 100}%` }} />
+        </div>
+        <p className="text-xs text-muted-foreground mt-1">{seen.size}/{cards.length} cards reviewed</p>
+      </div>
+      <div onClick={handleFlip} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleFlip(); }}} role="button" tabIndex={0} aria-label={flipped ? "Card showing definition. Press to see term." : "Card showing term. Press to reveal definition."} className="cursor-pointer select-none bg-card border-2 border-border rounded-2xl p-6 min-h-[160px] flex flex-col items-center justify-center text-center shadow-sm hover:border-primary transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+        <span aria-live="polite" aria-atomic="true" className="sr-only">{flipped ? cards[idx].back : cards[idx].front}</span>
+        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">{flipped ? "Definition" : "Term"} — {idx + 1} / {cards.length}</p>
+        <p className={`font-semibold leading-relaxed ${flipped ? "text-sm text-muted-foreground" : "text-base text-foreground"}`}>
+          {flipped ? cards[idx].back : cards[idx].front}
+        </p>
+        <p className="text-xs text-muted-foreground mt-4">{flipped ? "Click to see term" : "Click to reveal definition"}</p>
+      </div>
+      <div className="flex gap-2">
+        <button onClick={handlePrev} disabled={idx === 0} className="flex-1 py-2 rounded-xl border border-border text-sm font-medium text-foreground disabled:opacity-30 hover:bg-muted transition">← Prev</button>
+        <button onClick={handleNext} disabled={idx === cards.length - 1} className="flex-1 py-2 rounded-xl border border-border text-sm font-medium text-foreground disabled:opacity-30 hover:bg-muted transition">Next →</button>
+      </div>
+      <button disabled={!allSeen} onClick={() => onComplete(cards.length, cards.length)}
+        className="w-full py-3 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:opacity-90 transition disabled:opacity-40">
+        {allSeen ? "Mark Complete — Unlock Quiz ✓" : `Review all cards to unlock (${seen.size}/${cards.length})`}
+      </button>
+    </div>
+  );
+}
+
 function QuizStation({ onPass, onFail }: { onPass: (score: number, results: { correct: boolean; exp: string }[]) => void; onFail: (score: number, results: { correct: boolean; exp: string }[]) => void }) {
   const [questions] = useState(() => shuffle(QUIZ_BANK).map(q => {
     const s = shuffleOpts(q.opts, q.correct);
@@ -1055,7 +1116,7 @@ function Header({ station, onStation, completed }: { station: Station; onStation
   ];
   const CONTENT_STATIONS: Station[] = ["recap","hhi","merger","anticomp","natmonreg","deregulation"];
   const allDone = CONTENT_STATIONS.every(s => completed.has(s as Station));
-  const stationOrder: Station[] = ["intro","recap","hhi","merger","anticomp","natmonreg","deregulation","quiz","results","not-yet"];
+  const stationOrder: Station[] = ["intro","recap","hhi","merger","anticomp","natmonreg","deregulation","flash","flash","quiz","results","not-yet"];
   const currentIdx = stationOrder.indexOf(station);
 
   return (
@@ -1173,6 +1234,7 @@ export default function EconLab() {
           </div>
         )}
 
+        {station === "flash" && <FlashcardStation onComplete={(sc, t) => { markDone("flash"); }} />}
         {station === "quiz" && (
           <div className="space-y-4">
             <div className="flex items-center gap-3">

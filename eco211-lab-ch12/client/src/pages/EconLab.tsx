@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { ChevronLeft, Award, RotateCcw } from "lucide-react";
 
-type Station = "intro" | "recap" | "externalities" | "cmdcontrol" | "markettools" | "tradeoff" | "international" | "quiz" | "results" | "not-yet";
+type Station = "intro" | "recap" | "externalities" | "cmdcontrol" | "markettools" | "tradeoff" | "international" | "flash" | "quiz" | "results" | "not-yet";
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -563,6 +563,67 @@ const QUIZ_BANK = [
   { q: "Which of the following correctly describe negative externalities and how they cause market failure? (Select all that apply)", opts: ["The social cost exceeds the private cost", "The market produces too much output compared to the socially optimal level", "Externalities lead to underproduction", "Firms that don't pay social costs have an incentive to overproduce"], correct: [0, 1, 3], multi: true, exp: "Negative externality: social cost > private cost → overproduction. Firms ignore external costs, so they produce more than is socially optimal. Externalities lead to OVER-production (negative) or UNDER-production (positive) — not the same direction." },
 ];
 
+const FLASHCARDS = [
+  { front: "Externality", back: "A cost or benefit that spills over to third parties not involved in a transaction. Negative externality: imposes costs on others (pollution). Positive externality: confers benefits on others (vaccination)." },
+  { front: "Negative Externality", back: "A spillover cost imposed on third parties. Markets overproduce goods with negative externalities because producers don't pay the full social cost. Result: market quantity > socially optimal quantity." },
+  { front: "Social Cost", back: "Private cost (paid by the producer) + External cost (imposed on others). When negative externalities exist, social cost > private cost. Socially optimal output is where Social MB = Social MC." },
+  { front: "Command-and-Control Regulation", back: "Government sets specific pollution limits and mandates specific technologies or practices. Simple to enforce but inflexible — doesn't find the lowest-cost way to reduce pollution." },
+  { front: "Pollution Charge (Pigouvian Tax)", back: "A tax per unit of pollution equal to the external cost. Forces producers to internalize the externality. Efficient — gives firms flexibility to find the cheapest way to reduce emissions." },
+  { front: "Cap-and-Trade System", back: "Government sets a total pollution cap and issues tradeable permits. Firms with low abatement costs sell permits; firms with high costs buy them. Achieves the pollution target at minimum total cost." },
+  { front: "Property Rights (Coase Theorem)", back: "If property rights are clearly defined and transaction costs are low, private bargaining can solve externalities without government intervention — regardless of who holds the rights." },
+  { front: "Optimal Level of Pollution Control", back: "Where the marginal benefit of pollution reduction equals the marginal cost of reduction. Not zero pollution — the last unit of cleanup costs more than it's worth beyond this point." },
+  { front: "Environmental Kuznets Curve", back: "The empirical pattern where pollution rises with income at low levels of development, then falls as income rises further. Richer countries demand — and can afford — cleaner environments." },
+  { front: "Public Good", back: "A good that is non-excludable (cannot prevent non-payers from using it) and non-rival (one person's use doesn't reduce availability to others). Examples: national defense, lighthouses, basic research." },
+  { front: "Market Failure", back: "A situation where free markets fail to allocate resources efficiently. Causes: externalities, public goods, information asymmetries, market power. Justifies potential government intervention." },
+  { front: "Internalize the Externality", back: "Aligning private costs with social costs so decision-makers bear the full consequences of their choices. Tools: taxes (negative externalities), subsidies (positive externalities), regulations, property rights." },
+];
+
+function FlashcardStation({ onComplete }: { onComplete: (score: number, total: number) => void }) {
+  const [cards] = useState(() => shuffle([...FLASHCARDS]));
+  const [idx, setIdx] = useState(0);
+  const [flipped, setFlipped] = useState(false);
+  const [seen, setSeen] = useState<Set<number>>(new Set());
+
+  function handleFlip() { setFlipped(f => !f); }
+  function handleNext() {
+    setSeen(s => new Set([...s, idx]));
+    if (idx < cards.length - 1) { setIdx(i => i + 1); setFlipped(false); }
+  }
+  function handlePrev() {
+    if (idx > 0) { setIdx(i => i - 1); setFlipped(false); }
+  }
+  const allSeen = seen.size >= cards.length - 1;
+
+  return (
+    <div className="max-w-lg mx-auto space-y-4">
+      <div className="bg-primary/10 border border-primary/20 rounded-xl p-4 text-sm">
+        <p className="font-semibold text-foreground mb-1">Flashcard Review — Chapter 12 Key Terms</p>
+        <p className="text-muted-foreground text-xs">Review all {cards.length} terms. Click each card to reveal the definition. You must view all cards before the Quiz unlocks.</p>
+        <div className="mt-2 h-1.5 bg-primary/20 rounded-full overflow-hidden">
+          <div className="h-full bg-primary rounded-full transition-all" role="progressbar" aria-valuenow={seen.size} aria-valuemin={0} aria-valuemax={cards.length} style={{ width: `${(seen.size / cards.length) * 100}%` }} />
+        </div>
+        <p className="text-xs text-muted-foreground mt-1">{seen.size}/{cards.length} cards reviewed</p>
+      </div>
+      <div onClick={handleFlip} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleFlip(); }}} role="button" tabIndex={0} aria-label={flipped ? "Card showing definition. Press to see term." : "Card showing term. Press to reveal definition."} className="cursor-pointer select-none bg-card border-2 border-border rounded-2xl p-6 min-h-[160px] flex flex-col items-center justify-center text-center shadow-sm hover:border-primary transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+        <span aria-live="polite" aria-atomic="true" className="sr-only">{flipped ? cards[idx].back : cards[idx].front}</span>
+        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">{flipped ? "Definition" : "Term"} — {idx + 1} / {cards.length}</p>
+        <p className={`font-semibold leading-relaxed ${flipped ? "text-sm text-muted-foreground" : "text-base text-foreground"}`}>
+          {flipped ? cards[idx].back : cards[idx].front}
+        </p>
+        <p className="text-xs text-muted-foreground mt-4">{flipped ? "Click to see term" : "Click to reveal definition"}</p>
+      </div>
+      <div className="flex gap-2">
+        <button onClick={handlePrev} disabled={idx === 0} className="flex-1 py-2 rounded-xl border border-border text-sm font-medium text-foreground disabled:opacity-30 hover:bg-muted transition">← Prev</button>
+        <button onClick={handleNext} disabled={idx === cards.length - 1} className="flex-1 py-2 rounded-xl border border-border text-sm font-medium text-foreground disabled:opacity-30 hover:bg-muted transition">Next →</button>
+      </div>
+      <button disabled={!allSeen} onClick={() => onComplete(cards.length, cards.length)}
+        className="w-full py-3 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:opacity-90 transition disabled:opacity-40">
+        {allSeen ? "Mark Complete — Unlock Quiz ✓" : `Review all cards to unlock (${seen.size}/${cards.length})`}
+      </button>
+    </div>
+  );
+}
+
 function QuizStation({ onPass, onFail }: { onPass: (score: number, results: { correct: boolean; exp: string }[]) => void; onFail: (score: number, results: { correct: boolean; exp: string }[]) => void }) {
   const [questions] = useState(() => shuffle(QUIZ_BANK).map(q => {
     const s = shuffleOpts(q.opts, q.correct);
@@ -840,7 +901,7 @@ function Header({ station, onStation, completed }: { station: Station; onStation
   ];
   const CONTENT_STATIONS: Station[] = ["recap","externalities","cmdcontrol","tradeoff","international"];
   const allDone = CONTENT_STATIONS.every(s => completed.has(s as Station));
-  const stationOrder: Station[] = ["intro","recap","externalities","cmdcontrol","tradeoff","international","quiz","results","not-yet"];
+  const stationOrder: Station[] = ["intro","recap","externalities","cmdcontrol","tradeoff","international","flash","flash","quiz","results","not-yet"];
   const currentIdx = stationOrder.indexOf(station);
 
   return (
@@ -956,6 +1017,7 @@ export default function EconLab() {
           </div>
         )}
 
+        {station === "flash" && <FlashcardStation onComplete={(sc, t) => { markDone("flash"); }} />}
         {station === "quiz" && (
           <div className="space-y-4">
             <div className="flex items-center gap-3">
