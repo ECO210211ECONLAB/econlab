@@ -2281,6 +2281,8 @@ function Header({
   const allStationsDone = STATIONS_LIST.every((s) => completed.has(s.id));
 
   return (
+    <>
+    <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg focus:font-semibold">Skip to main content</a>
     <header
       role="banner"
       className="bg-secondary text-secondary-foreground shadow-md sticky top-0 z-50"
@@ -2302,14 +2304,7 @@ function Header({
           </div>
         </div>
 
-        <a
-          href={hubUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hidden sm:flex items-center gap-1.5 text-xs text-sidebar-foreground/80 hover:text-white transition-colors px-2 py-1 rounded-lg hover:bg-sidebar-accent shrink-0"
-        >
-          ← Course Hub <span className="sr-only">(opens in new tab)</span>
-        </a>
+        
 
         <div className="hidden sm:flex items-center gap-1 flex-wrap">
           {NAV_STATIONS.map((s) => {
@@ -2365,6 +2360,7 @@ function Header({
         </div>
       </div>
     </header>
+    </>
   );
 }
 

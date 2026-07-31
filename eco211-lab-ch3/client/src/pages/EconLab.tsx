@@ -668,6 +668,7 @@ function SteppedQuiz({ q, idx, total, sel, setSel, checked, onCheck, onNext, isL
       <div className="space-y-2">
         {q.options.map((opt, i) => (
           <button key={i} disabled={checked} onClick={() => setSel(i)}
+            aria-pressed={sel === i}
             className={`w-full text-left px-4 py-2.5 rounded-lg border text-sm transition ${
               checked
                 ? i === q.correct ? "border-green-500 bg-green-50 text-green-900"
@@ -766,7 +767,8 @@ function FlashcardStation({ onComplete }: { onComplete: (score: number, total: n
       {!allDone ? (
         <div className="space-y-3">
           <p className="text-xs text-muted-foreground text-center">Card {cardIdx + 1} of {total}</p>
-          <div onClick={() => setFlipped((f) => !f)}
+          <div onClick={() => setFlipped((f) => !f)} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setFlipped(f => !f); }}} role="button" tabIndex={0} aria-label={flipped ? "Card showing definition. Press to see term." : "Card showing term. Press to reveal definition."}
+          aria-live="polite"
             className="bg-card border-2 border-border rounded-2xl p-6 min-h-[180px] cursor-pointer flex flex-col justify-between hover:border-primary transition">
             <div className="space-y-2">
               <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
@@ -1003,6 +1005,7 @@ function QuizStation({ onPass, onFail }: { onPass: (score: number, results: { co
         <div className="space-y-2">
           {q.options.map((opt, i) => (
             <button key={`q${idx}-opt${i}`} disabled={checked} onClick={() => setSel(i)}
+              aria-pressed={sel === i}
               className={`w-full text-left px-4 py-2.5 rounded-lg border text-sm transition ${
                 checked
                   ? i === q.correct ? "border-green-500 bg-green-50 text-green-900"
@@ -1225,7 +1228,7 @@ function Dashboard({ completed, onSelect, quizUnlocked, onStartQuiz, onSummary }
         <p className="font-semibold mb-1">Chapter 3 — Demand and Supply</p>
         <p className="text-muted-foreground text-xs">Complete all stations and the Flashcard review to unlock the Quiz. Your progress is saved automatically.</p>
         <div className="mt-3 h-2 bg-primary/20 rounded-full overflow-hidden">
-          <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${(progress / STATIONS.length) * 100}%` }} />
+          <div className="h-full bg-primary rounded-full transition-all" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={STATIONS.length} style={{ width: `${(progress / STATIONS.length) * 100}%` }} />
         </div>
         <p className="text-xs text-muted-foreground mt-1">{progress}/{STATIONS.length} stations complete</p>
       </div>
@@ -1266,7 +1269,9 @@ function Header({ station, completed, onNav, courseTitle, courseSubtitle, hubUrl
   const currentIdx = STATION_ORDER.indexOf(station);
   const allStationsDone = STATIONS.every(s => completed.has(s.id));
   return (
-    <header role="banner" className="bg-secondary text-secondary-foreground shadow-md sticky top-0 z-50">
+    <>
+    <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg focus:font-semibold">Skip to main content</a>
+      <header role="banner" className="bg-secondary text-secondary-foreground shadow-md sticky top-0 z-50">
       <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
         <div className="flex items-center gap-2 shrink-0">
           <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-label="Econ Lab logo">
@@ -1309,6 +1314,7 @@ function Header({ station, completed, onNav, courseTitle, courseSubtitle, hubUrl
         </div>
       </div>
     </header>
+    </>
   );
 }
 

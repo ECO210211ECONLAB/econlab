@@ -999,7 +999,7 @@ function Dashboard({ completed, onSelect, quizUnlocked, onStartQuiz, onSummary }
         <p className="font-semibold mb-1">Chapter 1 — Introduction to Economics</p>
         <p className="text-muted-foreground text-xs">Complete all 5 stations and the Recap to unlock the Quiz. Your progress is saved automatically.</p>
         <div className="mt-3 h-2 bg-primary/20 rounded-full overflow-hidden">
-          <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${(progress / STATIONS.length) * 100}%` }} />
+          <div className="h-full bg-primary rounded-full transition-all" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={STATIONS.length} style={{ width: `${(progress / STATIONS.length) * 100}%` }} />
         </div>
         <p className="text-xs text-muted-foreground mt-1">{progress}/{STATIONS.length} stations complete</p>
       </div>
@@ -1059,7 +1059,9 @@ function Header({ station, completed, onNav, courseTitle, courseSubtitle, hubUrl
   const allStationsDone = STATIONS.every(s => completed.has(s.id));
 
   return (
-    <header role="banner" className="bg-secondary text-secondary-foreground shadow-md sticky top-0 z-50">
+    <>
+    <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg focus:font-semibold">Skip to main content</a>
+      <header role="banner" className="bg-secondary text-secondary-foreground shadow-md sticky top-0 z-50">
       <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
         {/* Logo */}
         <div className="flex items-center gap-2 shrink-0">
@@ -1075,10 +1077,7 @@ function Header({ station, completed, onNav, courseTitle, courseSubtitle, hubUrl
         </div>
 
         {/* Back to Hub */}
-        <a href={hubUrl} target="_blank" rel="noopener noreferrer"
-          className="hidden sm:flex items-center gap-1.5 text-xs text-sidebar-foreground/80 hover:text-white transition-colors px-2 py-1 rounded-lg hover:bg-sidebar-accent shrink-0">
-          ← Course Hub <span className="sr-only">(opens in new tab)</span>
-        </a>
+        
 
         {/* Nav pills */}
         <div className="hidden sm:flex items-center gap-1 flex-wrap">
@@ -1116,6 +1115,7 @@ function Header({ station, completed, onNav, courseTitle, courseSubtitle, hubUrl
         </div>
       </div>
     </header>
+    </>
   );
 }
 

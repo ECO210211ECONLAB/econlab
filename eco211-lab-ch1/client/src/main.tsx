@@ -8,7 +8,7 @@ createRoot(document.getElementById("root")!).render(
     <EconLab
       courseTitle="ECO 211 ECONLAB"
       courseSubtitle="Chapter 1 — Introduction to Economics"
-      hubUrl="https://www.perplexity.ai/computer/a/eco-211-econlab-course-hub-h76o7OX6SpisjlWADnIRGg"
+      hubUrl="https://www.perplexity.ai/computer/a/eco211-hub-h76o7OX6SpisjlWADnIRGg"
     />
   </StrictMode>
 );
